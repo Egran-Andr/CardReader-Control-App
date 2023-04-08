@@ -124,6 +124,43 @@ namespace RFID_WPF_Autorization
             var periodhistory = await ApiProcessor.deleteCardconnection(cardcode);
         }
 
+        private async Task GetAlWorkplaces()
+        {
+            var periodhistory = await ApiProcessor.GetWorkplaceList();
+        }
+        private async Task CreateNewWorkplaceConn(WorkplaceUserConnection connection)
+        {
+            var periodhistory = await ApiProcessor.CreateNewUserWorkspaceConnection(connection);
+        }
+
+        private async Task UpdateWorkplaceUserConn(WorkplaceUserConnection connection)
+        {
+            var periodhistory = await ApiProcessor.UpdateUserWorkplace(connection);
+        }
+        private async Task CreateNewGender(GenderModel gender)
+        {
+            var periodhistory = await ApiProcessor.CreateNewGender(gender);
+        }
+
+        private async Task CreateNewBalance(BalanceModel balance)
+        {
+            var periodhistory = await ApiProcessor.CreateNewBalance(balance);
+        }
+        private async Task UpdateBalance(BalanceModel balance)
+        {
+            var periodhistory = await ApiProcessor.UpdateUserBalance(balance);
+        }
+        private async Task GetUserBalance(int id)
+        {
+            var periodhistory = await ApiProcessor.getUserBalance(id);
+            MessageBox.Show(periodhistory.balance.ToString(), periodhistory.workerid.ToString());
+        }
+        private  async Task GetListBalances()
+        {
+            var balancelist = await ApiProcessor.getAllBalances();
+            //MessageBox.Show(balancelist[0].balance.ToString(), balancelist[0].workerid.ToString());
+        }
+
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             NFC.CardInserted += new NFCReader.CardEventHandler(Card_Inserted);
@@ -143,6 +180,7 @@ namespace RFID_WPF_Autorization
             WorkplaceModel model = new WorkplaceModel { Name = "Test" };
             HistoryModel modelhistory = new HistoryModel { workerid=3,workplaceid=1, entertimestamp=DateTime.Now};
 
+
             //await Createuser(user);
             //await LoadUser(4);
             //await UpdateUser(1,user);
@@ -156,6 +194,14 @@ namespace RFID_WPF_Autorization
             //await GetConnectedCards();
             //await GetHistoryPeriod(new DateTime(2022, 1, 1, 0, 0, 0), new DateTime(2023, 4, 5, 0, 0, 0),4);
             //await DeletecardByName("string");
+            //await GetAlWorkplaces();
+            //await CreateNewWorkplaceConn(new WorkplaceUserConnection { workerid=4,workplaceid=2 });
+            //await UpdateWorkplaceUserConn(new WorkplaceUserConnection { workerid=4,workplaceid=1 });
+            //await CreateNewGender(new GenderModel { title = "БАИВОЙ ВЕРТАЛЕТ" });
+            //await CreateNewBalance(new BalanceModel { workerid = 4, balance = 1000.20 });
+            //await UpdateBalance(new BalanceModel { workerid = 3, balance = 100000.15});
+            await GetUserBalance(3);
+            //await GetListBalances();
         }
         private async void Card_Inserted()
         {

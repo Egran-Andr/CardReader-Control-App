@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -152,6 +153,25 @@ namespace RFID_WPF_Autorization
             }
         }
 
+        //ger all workplaces
+        public static async Task<List<WorkplaceReturnModel>> GetWorkplaceList()
+        {
+            string url = $"/workplace/all";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    List<WorkplaceReturnModel> workplaces = await response.Content.ReadAsAsync<List<WorkplaceReturnModel>>();
+                    return workplaces;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         //create new history entry
         public static async Task<Uri> NewHistoryEntry(HistoryModel newentry)
         {
@@ -257,6 +277,127 @@ namespace RFID_WPF_Autorization
                 if (response.IsSuccessStatusCode)
                 {
                     return response.StatusCode;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        //create new workspace-user connection
+        public static async Task<Uri> CreateNewUserWorkspaceConnection(WorkplaceUserConnection connect)
+        {
+            string url = $"/userworkpace/";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, connect))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.Headers.Location;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        //update user info
+        public static async Task<Uri> UpdateUserWorkplace(WorkplaceUserConnection connect)
+        {
+            string url = $"/userworkpace/update/{connect.workerid}/{connect.workplaceid}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PutAsync(url,null))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.Headers.Location;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        //create new gender(осуждаю)
+        public static async Task<Uri> CreateNewGender(GenderModel gendername)
+        {
+            string url = $"/gender/";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url,gendername))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.Headers.Location;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        //balance create
+        public static async Task<Uri> CreateNewBalance(BalanceModel balance)
+        {
+            string url = $"/balance/";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, balance))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.Headers.Location;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+        //balance update
+        public static async Task<Uri> UpdateUserBalance(BalanceModel balance)
+        {
+            string url = $"/balance/update/{balance.workerid}/{balance.balance.ToString(CultureInfo.GetCultureInfo("en-US"))}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PutAsync(url, null))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.Headers.Location;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        //get user balance
+        public static async Task<BalanceModel> getUserBalance(int userid)
+        {
+            string url = $"/balance/by_id?id={userid}";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    BalanceModel userbalance = await response.Content.ReadAsAsync<BalanceModel>();
+                    return userbalance;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        //get list of balance
+        public static async Task<List<BalanceModel>> getAllBalances()
+        {
+            string url = "/balance/all";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    List<BalanceModel> balances = await response.Content.ReadAsAsync<List<BalanceModel>>();
+                    return balances;
                 }
                 else
                 {
