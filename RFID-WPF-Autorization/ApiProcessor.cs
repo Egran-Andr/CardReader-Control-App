@@ -31,7 +31,7 @@ namespace RFID_WPF_Autorization
             }
         }
         //create new user
-        public static async Task<Uri> CreateUser(UserModel user)
+        public static async Task<FullUser> CreateUser(UserModel user)
         {
             string url = $"/users/";
 
@@ -39,7 +39,8 @@ namespace RFID_WPF_Autorization
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    return response.Headers.Location;
+                    FullUser createduserinfo = await response.Content.ReadAsAsync<FullUser>();
+                    return createduserinfo;
                 }
                 else
                 {

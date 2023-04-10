@@ -33,7 +33,6 @@ namespace RFID_WPF_Autorization
         {
             InitializeComponent();
             ApiHelper.InitializeClient();
-            
         }
         private static BitmapImage ByteArrayToImage(byte[] imageData)
         {
@@ -61,7 +60,7 @@ namespace RFID_WPF_Autorization
         private async Task Createuser(UserModel user)
         {
             var newuser = await ApiProcessor.CreateUser(user);
-            MessageBox.Show(user.photopath, "userLoaded");
+            MessageBox.Show(newuser.id.ToString(), "userLoaded");
         }
         private async Task UpdateUser(int userid,UserModel user)
         {
@@ -163,17 +162,26 @@ namespace RFID_WPF_Autorization
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            NFC.CardInserted += new NFCReader.CardEventHandler(Card_Inserted);
-            //Ejected Event
-            NFC.CardEjected += new NFCReader.CardEventHandler(CardRemoved);
-            NFC.Watch();
+            try
+            {
+                NFC.CardInserted += new NFCReader.CardEventHandler(Card_Inserted);
+                //Ejected Event
+                NFC.CardEjected += new NFCReader.CardEventHandler(CardRemoved);
+                NFC.Watch();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No reader connected.Please connect reader and reboot app", "CardReaded Error");
+                Application.Current.Shutdown();
+
+            }
             MessageBox.Show("We are in!", "CardReaded");
 
             UserModel user = new UserModel { 
-                Name="Евгений",
+                Name="Dcbkbq",
                 Surname="Васильков",
                 lastname="Александрович",
-                birthdate="2022-01-10",
+                birthdate="2022-02-10",
                 gender=1,
                 photopath="string"
             };
@@ -200,12 +208,11 @@ namespace RFID_WPF_Autorization
             //await CreateNewGender(new GenderModel { title = "БАИВОЙ ВЕРТАЛЕТ" });
             //await CreateNewBalance(new BalanceModel { workerid = 4, balance = 1000.20 });
             //await UpdateBalance(new BalanceModel { workerid = 3, balance = 100000.15});
-            await GetUserBalance(3);
+            //await GetUserBalance(3);
             //await GetListBalances();
         }
         private async void Card_Inserted()
         {
-            
             if (NFC.Connect())
             {
                 //Do stuff like NFC.GetCardUID(); ...
@@ -214,8 +221,9 @@ namespace RFID_WPF_Autorization
                  {
                      testtext.Text = NFC.GetCardUID();
                      Debug.WriteLine(NFC.ReadBlock("2"));
-                     NFC.WriteBlock("Meme", "2"); // returns boolean
-                     Debug.WriteLine(Encoding.UTF8.GetString(NFC.ReadBlock("2")));
+                     Debug.WriteLine(NFC.WriteBlock("1", "2")); // returns boolean
+                     var returnbyte= NFC.ReadBlock("2");
+                     MessageBox.Show(System.Text.Encoding.Default.GetString(returnbyte));
                      NFC.GetReadersList();
                      //CardConnectionModel cardConnection = new CardConnectionModel { Userid = 3, RFID_CardNumber = NFC.GetCardUID() };
                      //await CreateNewCardConnection(cardConnection);
