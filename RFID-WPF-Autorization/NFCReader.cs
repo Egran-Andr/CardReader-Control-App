@@ -20,7 +20,7 @@ public class NFCReader
         Ejected = 2
     }
 
-    public delegate void CardEventHandler();
+    public delegate Task CardEventHandler();
     public event CardEventHandler CardInserted;
     public event CardEventHandler CardEjected;
     public event CardEventHandler DeviceDisconnected;

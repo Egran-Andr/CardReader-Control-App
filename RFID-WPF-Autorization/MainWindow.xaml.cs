@@ -28,7 +28,7 @@ namespace RFID_WPF_Autorization
     /// </summary>
     public partial class MainWindow : Window
     {
-        NFCReader NFC = new NFCReader();
+        //NFCReader NFC = new NFCReader();
         public MainWindow()
         {
             InitializeComponent();
@@ -51,7 +51,6 @@ namespace RFID_WPF_Autorization
             image.Freeze();
             return image;
         }
-        
         private async Task LoadUser(int userid)
         {
             var user = await ApiProcessor.GetUser(userid);
@@ -73,7 +72,7 @@ namespace RFID_WPF_Autorization
         private async Task Loadimage(int userid)
         {
             var photo = await ApiProcessor.LoadImage(userid);
-            LoadImage.Source = ByteArrayToImage(photo);
+            //LoadImage.Source = ByteArrayToImage(photo);
         }
         private async Task PushImage(string filepath)
         {
@@ -164,10 +163,11 @@ namespace RFID_WPF_Autorization
         {
             try
             {
-                NFC.CardInserted += new NFCReader.CardEventHandler(Card_Inserted);
+                //NFC.CardInserted += new NFCReader.CardEventHandler(Card_Inserted);
                 //Ejected Event
-                NFC.CardEjected += new NFCReader.CardEventHandler(CardRemoved);
-                NFC.Watch();
+                //NFC.CardEjected += new NFCReader.CardEventHandler(CardRemoved);
+                //NFC.Watch();
+                _mainFrame.Navigate(new CreateUserPage());
             }
             catch (Exception)
             {
@@ -177,14 +177,7 @@ namespace RFID_WPF_Autorization
             }
             MessageBox.Show("We are in!", "CardReaded");
 
-            UserModel user = new UserModel { 
-                Name="Dcbkbq",
-                Surname="Васильков",
-                lastname="Александрович",
-                birthdate="2022-02-10",
-                gender=1,
-                photopath="string"
-            };
+
             WorkplaceModel model = new WorkplaceModel { Name = "Test" };
             HistoryModel modelhistory = new HistoryModel { workerid=3,workplaceid=1, entertimestamp=DateTime.Now};
 
@@ -211,7 +204,7 @@ namespace RFID_WPF_Autorization
             //await GetUserBalance(3);
             //await GetListBalances();
         }
-        private async void Card_Inserted()
+        /*private async void Card_Inserted()
         {
             if (NFC.Connect())
             {
@@ -219,7 +212,7 @@ namespace RFID_WPF_Autorization
                 Debug.WriteLine("Connected");
                 await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(async () =>
                  {
-                     testtext.Text = NFC.GetCardUID();
+                     //testtext.Text = NFC.GetCardUID();
                      Debug.WriteLine(NFC.ReadBlock("2"));
                      Debug.WriteLine(NFC.WriteBlock("1", "2")); // returns boolean
                      var returnbyte= NFC.ReadBlock("2");
@@ -227,6 +220,18 @@ namespace RFID_WPF_Autorization
                      NFC.GetReadersList();
                      //CardConnectionModel cardConnection = new CardConnectionModel { Userid = 3, RFID_CardNumber = NFC.GetCardUID() };
                      //await CreateNewCardConnection(cardConnection);
+
+                     UserModel user = new UserModel
+                     {
+                         Name = "Dcbkbq",
+                         Surname = "Васильков",
+                         lastname = "Александрович",
+                         birthdate = "2022-02-10",
+                         gender = 1,
+                         photopath = "string"
+                     };
+
+                     await Createuser(user);
                  }));
             }
             else
@@ -239,8 +244,8 @@ namespace RFID_WPF_Autorization
         private void CardRemoved()
         {
             Debug.WriteLine("Disconected");
-            NFC.Disconnect();
-        }
+            //NFC.Disconnect();
+        }*/
 
     }
 }

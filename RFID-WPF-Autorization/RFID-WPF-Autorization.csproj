@@ -13,7 +13,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="default_user.jpeg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.1.2" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
+    <PackageReference Include="ShowMeTheXAML" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="default_user.jpeg" />
   </ItemGroup>
 
 </Project>
