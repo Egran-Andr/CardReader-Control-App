@@ -38,17 +38,16 @@
   materialDesign:HintAssist.Hint="Отчество(необязательно)"
   Style="{StaticResource MaterialDesignFloatingHintTextBox}"
   VerticalAlignment="Top" Margin="0,36,0,0" />
+        <DatePicker Grid.Row="3" Height="Auto"  SelectedDateFormat="Long" 
+  Name="LocaleDatePicker"
+  materialDesign:HintAssist.Hint="Дата рождения" Margin="0,72,0,0" VerticalAlignment="Top" />
         <ComboBox Grid.Row="3" Height="Auto" x:Name="genderbox"
-  materialDesign:HintAssist.Hint="Пол">
+  materialDesign:HintAssist.Hint="Пол" Margin="0,101,0,0" VerticalAlignment="Top">
             <ComboBoxItem
     Content="Женский" />
             <ComboBoxItem
     Content="Мужской" />
-            <materialDesign:Badged Content="Badged" Height="13" Width="0"/>
         </ComboBox>
-        <DatePicker Grid.Row="3" Height="Auto"  SelectedDateFormat="Long" 
-  Name="LocaleDatePicker"
-  materialDesign:HintAssist.Hint="Дата рождения" Margin="0,103,0,0" VerticalAlignment="Top" />
         <Label  x:Name="comment" Content="После заполнения полей,приседините карточку для записи" HorizontalContentAlignment="Center" Width="Auto" Height="38" Grid.Row="3" FontSize="20" Margin="0,103,0,0" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

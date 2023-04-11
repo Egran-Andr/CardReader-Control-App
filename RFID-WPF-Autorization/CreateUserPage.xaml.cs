@@ -23,7 +23,7 @@ namespace RFID_WPF_Autorization
     /// </summary>
     public partial class CreateUserPage : Page
     {
-        string userimagefile= "default";//полный путь к фотографии пользователя на компе клиента
+        string userimagefile= "default_user.jpeg";//полный путь к фотографии пользователя на компе клиента
         NFCReader NFC = new NFCReader();
         FullUser createduser = new FullUser();
         string cardid;
@@ -86,8 +86,14 @@ namespace RFID_WPF_Autorization
 
                             user.photopath = System.IO.Path.GetFileName(userimagefile);
                         await Createuser(user);
-                        await CreateNewCardConnection(new CardConnectionModel { Userid = createduser.id, RFID_CardNumber=NFC.GetCardUID()});
-                        if (user.photopath != "default") { await PushImage(userimagefile); }
+                        try { 
+                            await CreateNewCardConnection(new CardConnectionModel { Userid = createduser.id, RFID_CardNumber = NFC.GetCardUID() });
+                        }
+                        catch (Exception e){ MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.");};
+                        if (user.photopath != "default_user.jpeg") { await PushImage(userimagefile); }
+                       NFC.WriteBlock(createduser.id.ToString(), "2");
+                        var returnbyte = NFC.ReadBlock("2");
+                        MessageBox.Show(System.Text.Encoding.Default.GetString(returnbyte));
                     }
                     else {
                         MessageBox.Show("Заполните все поля. Проверьте правильность ввода");
@@ -115,7 +121,14 @@ namespace RFID_WPF_Autorization
 
         private async Task CreateNewCardConnection(CardConnectionModel model)
         {
-            var hostoryentry = await ApiProcessor.NewCardConnection(model);
+            try
+            {
+                var hostoryentry = await ApiProcessor.NewCardConnection(model);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException($"Card with this uid is already created");
+            }
         }
 
         private async Task PushImage(string filepath)
