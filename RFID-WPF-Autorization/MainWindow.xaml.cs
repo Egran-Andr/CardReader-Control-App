@@ -167,7 +167,7 @@ namespace RFID_WPF_Autorization
                 //Ejected Event
                 //NFC.CardEjected += new NFCReader.CardEventHandler(CardRemoved);
                 //NFC.Watch();
-                _mainFrame.Navigate(new CreateUserPage());
+                _mainFrame.Navigate(new EnteringPage());
             }
             catch (Exception)
             {
@@ -179,7 +179,7 @@ namespace RFID_WPF_Autorization
 
 
             WorkplaceModel model = new WorkplaceModel { Name = "Test" };
-            HistoryModel modelhistory = new HistoryModel { workerid=3,workplaceid=1, entertimestamp=DateTime.Now};
+            //HistoryModel modelhistory = new HistoryModel { workerid=3,workplaceid=1, entertimestamp=DateTime.Now};
 
 
             //await Createuser(user);

@@ -91,7 +91,7 @@ namespace RFID_WPF_Autorization
                         }
                         catch (Exception e){ MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.");};
                         if (user.photopath != "default_user.jpeg") { await PushImage(userimagefile); }
-                       NFC.WriteBlock(createduser.id.ToString(), "2");
+                        NFC.WriteBlock(createduser.id.ToString(), "2");
                         var returnbyte = NFC.ReadBlock("2");
                         MessageBox.Show(System.Text.Encoding.Default.GetString(returnbyte));
                     }

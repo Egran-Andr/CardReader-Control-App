@@ -12,4 +12,18 @@ namespace RFID_WPF_Autorization
         public int workplaceid { get; set; }
         public DateTime entertimestamp { get; set; }
     }
+
+    public class HistoryReturnModel
+    {
+        public string workerfio { get; set; }
+        public string workplacename { get; set; }
+        public string entertimestamp { get; set; }
+    }
+
+    public class HistoryAddModel
+    {
+        public int workerid { get; set; }
+        public int workplaceid { get; set; }
+        public string entertimestamp { get; set; }
+    }
 }

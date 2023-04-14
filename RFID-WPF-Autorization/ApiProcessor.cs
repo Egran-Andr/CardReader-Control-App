@@ -178,7 +178,7 @@ namespace RFID_WPF_Autorization
         {
             string url = $"/users/historyadd";
 
-            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, newentry))
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, new HistoryAddModel { workerid=newentry.workerid,workplaceid=newentry.workplaceid,entertimestamp=newentry.entertimestamp.ToString( "yyyy-MM-dd H:mm:ss")}))
             {
                 if (response.IsSuccessStatusCode)
                 {
