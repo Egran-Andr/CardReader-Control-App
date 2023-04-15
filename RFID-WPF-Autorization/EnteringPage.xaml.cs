@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Newtonsoft.Json;
+using RFID_WPF_Autorization.Properties;
 
 namespace RFID_WPF_Autorization
 {
@@ -115,6 +118,18 @@ namespace RFID_WPF_Autorization
                         OpenShowUserWindow(loadeduserinfo, number);
                         filteredhistory =filteredhistory.OrderByDescending(o=>o.entertimestamp).ToList();
                         ListBoxData.ItemsSource = filteredhistory.Where(t => t.workplacename == CurrentWorkplace.Text);
+
+                        string filepath = Settings.Default["SaveLogsPath"].ToString() +"\\"+ DateTime.Now.ToString("dd-MM-yyyy") + "-log.json";
+                        string str = JsonConvert.SerializeObject(
+                          new
+                          {
+                              FIO = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname,
+                              wokplacename = workplaces.FirstOrDefault(t => t.id == curentworkplaceid).Name,
+                              Timestamp = datenow.ToString("dd/MM/yyyy HH:mm:ss")
+                          }
+                        );
+                        //File.AppendAllText(filepath, String.Format("FIO :{0} ; workplace_entered : {1}; entertime : {2}; \n", loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplaces.FirstOrDefault(t => t.id == curentworkplaceid).Name, datenow.ToString("dd/MM/yyyy HH:mm:ss")));
+                        File.AppendAllText(filepath,str);
                     }
                     else
                     { MessageBox.Show("Данные на карточке не были записанны", "Ошибка чтения"); }
