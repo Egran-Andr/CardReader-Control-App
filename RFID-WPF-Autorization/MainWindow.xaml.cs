@@ -48,6 +48,7 @@ namespace RFID_WPF_Autorization
                 theme.SetBaseTheme(Theme.Dark);
             }
             palette.SetTheme(theme);
+            
         }
         private static BitmapImage ByteArrayToImage(byte[] imageData)
         {
@@ -182,7 +183,14 @@ namespace RFID_WPF_Autorization
                 //Ejected Event
                 //NFC.CardEjected += new NFCReader.CardEventHandler(CardRemoved);
                 //NFC.Watch();
-                _mainFrame.Navigate(new EnteringPage());
+                if (Settings.Default["SaveLogsPath"].ToString() == "None")
+                {
+                    SettingsWindow Settings_Child_wimdow = new SettingsWindow();;
+                    if (Settings_Child_wimdow.ShowDialog() == true)
+                    {
+                        _mainFrame.Navigate(new EnteringPage());
+                    }
+                }
             }
             catch (Exception)
             {

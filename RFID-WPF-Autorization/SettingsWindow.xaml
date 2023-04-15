@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RFID_WPF_Autorization"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="200" Width="200" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="SettingsWindow" Height="200" Width="300" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
               TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -13,8 +13,52 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
+        FontFamily="{DynamicResource MaterialDesignFont}" WindowStyle="None">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition />
+            <RowDefinition Height="2*"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label x:Name="label" Content="Настройки" HorizontalContentAlignment="Center" Width="Auto" Grid.Row="0" FontSize="20" Height="Auto" Margin="0,0,0,0"/>
         
+        <Label  Grid.Row="1" HorizontalAlignment="Left" Content="Светлая тема" VerticalAlignment="Center"></Label>
+        <Label  Grid.Row="1" HorizontalAlignment="Right" Content="Темная тема" VerticalAlignment="Center"></Label>
+        
+        
+        <ToggleButton x:Name="ToogleTheme" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="50" Height="Auto"
+  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+  ToolTip="Смена темы" Click="ToogleTheme_Click">
+            <materialDesign:PackIcon
+    Kind="WhiteBalanceSunny"
+    RenderTransformOrigin=".5,.5">
+                <materialDesign:PackIcon.RenderTransform>
+                    <RotateTransform
+        Angle="360" />
+                </materialDesign:PackIcon.RenderTransform>
+            </materialDesign:PackIcon>
+            <materialDesign:ToggleButtonAssist.OnContent>
+                <materialDesign:PackIcon
+      Kind="MoonWaxingCrescent" />
+            </materialDesign:ToggleButtonAssist.OnContent>
+        </ToggleButton>
+        <Grid Grid.Row="2"  MouseLeftButtonDown="Grid_MouseLeftButtonDown" >
+            <Label x:Name="SaveLabel"   Content="Путь для сохранения" VerticalAlignment="Center" HorizontalAlignment="Left" MouseLeftButtonDown="Grid_MouseLeftButtonDown"></Label>
+            <materialDesign:PackIcon Kind="FolderOpen"  VerticalAlignment="Center" HorizontalAlignment="Right" Width="50" Foreground="LightGray" MouseLeftButtonDown="Grid_MouseLeftButtonDown"/>
+        </Grid>
+
+        
+        <Button Grid.Row="3" x:Name="SaveButton"
+  Style="{StaticResource MaterialDesignRaisedLightButton}"
+  Width="Auto"
+  ToolTip="Сохранить настройки"
+  Content="Сохранить" Click="SaveButton_Click"/>
+        <materialDesign:Snackbar Grid.Row="3"
+        x:Name="ThemeSwitchSback"
+        IsActive="False">
+            <materialDesign:SnackbarMessage HorizontalContentAlignment="Center"
+    Content="Тема изменена" />
+        </materialDesign:Snackbar>
     </Grid>
 </Window>
