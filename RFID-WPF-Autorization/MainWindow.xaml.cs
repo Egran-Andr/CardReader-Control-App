@@ -20,6 +20,8 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Drawing;
 using System.Net;
+using MaterialDesignThemes.Wpf;
+using RFID_WPF_Autorization.Properties;
 
 namespace RFID_WPF_Autorization
 {
@@ -33,6 +35,19 @@ namespace RFID_WPF_Autorization
         {
             InitializeComponent();
             ApiHelper.InitializeClient();
+            PaletteHelper palette = new PaletteHelper();
+
+            ITheme theme = palette.GetTheme();
+
+            if (Settings.Default["Theme"].ToString()=="Light")
+            {
+                theme.SetBaseTheme(Theme.Light);
+            }
+            else
+            {
+                theme.SetBaseTheme(Theme.Dark);
+            }
+            palette.SetTheme(theme);
         }
         private static BitmapImage ByteArrayToImage(byte[] imageData)
         {

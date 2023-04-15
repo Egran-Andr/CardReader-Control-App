@@ -22,7 +22,6 @@
             <RowDefinition />
             <RowDefinition Height="Auto"/>
             <RowDefinition />
-
         </Grid.RowDefinitions>
         <Label x:Name="label" Content="Создание пользователя" HorizontalContentAlignment="Center" Width="Auto" Grid.Row="0" FontSize="20" Height="42" Margin="0,4,0,3"/>
         <Image x:Name="UserNewImage" Height="201" Width="275" Source="default_user.jpeg" Stretch="Fill" Grid.Row="1" MouseLeftButtonDown="UserNewImage_MouseLeftButtonDown"/>

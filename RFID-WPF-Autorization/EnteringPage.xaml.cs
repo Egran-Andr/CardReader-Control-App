@@ -51,7 +51,7 @@ namespace RFID_WPF_Autorization
                 CurrentWorkplace.ItemsSource = list;
                 CurrentWorkplace.SelectedIndex = 0;
                 curentworkplaceid = workplaces.FirstOrDefault(t => t.Name == CurrentWorkplace.SelectedItem.ToString()).id;
-                await GetHistoryPeriod(new DateTime(1985, 3, 1,0,0,0),DateTime.Now.AddDays(1));
+                await GetHistoryPeriod(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1));
                 foreach (HistoryModel item in history)
                 {
                     await LoadUser(item.workerid);
@@ -112,7 +112,8 @@ namespace RFID_WPF_Autorization
                         });
                         await LoadUser(number);
                         filteredhistory.Add(new HistoryReturnModel { workerfio = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id == curentworkplaceid).Name, entertimestamp = datenow.ToString("dd/MM/yyyy HH:mm:ss") });
-                        filteredhistory=filteredhistory.OrderByDescending(o=>o.entertimestamp).ToList();
+                        OpenShowUserWindow(loadeduserinfo, number);
+                        filteredhistory =filteredhistory.OrderByDescending(o=>o.entertimestamp).ToList();
                         ListBoxData.ItemsSource = filteredhistory.Where(t => t.workplacename == CurrentWorkplace.Text);
                     }
                     else
@@ -139,6 +140,13 @@ namespace RFID_WPF_Autorization
             ListBoxData.ItemsSource = filteredhistory.Where(t => t.workplacename == CurrentWorkplace.SelectedItem.ToString());
             curentworkplaceid = workplaces.FirstOrDefault(t => t.Name == CurrentWorkplace.SelectedItem.ToString()).id;
             MessageBox.Show($"Отслеживание прохода в отдел {CurrentWorkplace.SelectedItem.ToString()} номер в БД: {curentworkplaceid}", "Смена прохода");
+        }
+
+        public void OpenShowUserWindow(UserModel person,int id)
+        {
+
+            ModalWindowShowUser FirstNameWindow_Child = new ModalWindowShowUser(person,id);
+            FirstNameWindow_Child.Show();
         }
     }
 }
