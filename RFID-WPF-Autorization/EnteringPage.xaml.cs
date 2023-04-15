@@ -148,5 +148,12 @@ namespace RFID_WPF_Autorization
             ModalWindowShowUser FirstNameWindow_Child = new ModalWindowShowUser(person,id);
             FirstNameWindow_Child.Show();
         }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow Settings_Child_wimdow = new SettingsWindow(); 
+            Settings_Child_wimdow.ShowDialog();
+
+        }
     }
 }

@@ -185,11 +185,27 @@ namespace RFID_WPF_Autorization
                 //NFC.Watch();
                 if (Settings.Default["SaveLogsPath"].ToString() == "None")
                 {
-                    SettingsWindow Settings_Child_wimdow = new SettingsWindow();;
+                    SettingsWindow Settings_Child_wimdow = new SettingsWindow(); ;
                     if (Settings_Child_wimdow.ShowDialog() == true)
                     {
                         _mainFrame.Navigate(new EnteringPage());
                     }
+                }
+                else
+                {
+                    if (Directory.Exists(Settings.Default["SaveLogsPath"].ToString()) == false)
+                    {
+                        string directory = Settings.Default["SaveLogsPath"].ToString();
+                        MessageBox.Show($"Ошибка доступа к папке {directory}. Обновите директорию", "Ошибка доступа");
+                        Settings.Default["SaveLogsPath"] = "None";
+                        Settings.Default.Save();
+                        SettingsWindow Settings_Child_wimdow = new SettingsWindow(); ;
+                        if (Settings_Child_wimdow.ShowDialog() == true)
+                        {
+                            _mainFrame.Navigate(new EnteringPage());
+                        }
+                    }
+                    else { _mainFrame.Navigate(new EnteringPage()); }
                 }
             }
             catch (Exception)
@@ -198,10 +214,9 @@ namespace RFID_WPF_Autorization
                 Application.Current.Shutdown();
 
             }
-            MessageBox.Show("We are in!", "CardReaded");
 
 
-            WorkplaceModel model = new WorkplaceModel { Name = "Test" };
+            //WorkplaceModel model = new WorkplaceModel { Name = "Test" };
             //HistoryModel modelhistory = new HistoryModel { workerid=3,workplaceid=1, entertimestamp=DateTime.Now};
 
 

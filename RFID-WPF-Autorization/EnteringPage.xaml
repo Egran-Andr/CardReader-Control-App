@@ -45,7 +45,7 @@
             <Button  x:Name ="SettingsButton" Grid.Column="3" HorizontalAlignment="Right"
         Style="{StaticResource MaterialDesignIconButton}"
         ToolTip="Список сотрудников"
-        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
+        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="SettingsButton_Click">
                 <materialDesign:PackIcon Kind="Settings"  />
             </Button>
         </Grid>

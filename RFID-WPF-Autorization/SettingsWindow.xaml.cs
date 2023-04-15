@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using RFID_WPF_Autorization.Properties;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace RFID_WPF_Autorization
 {
@@ -25,6 +26,8 @@ namespace RFID_WPF_Autorization
     {
         private DispatcherTimer timer;
         private int timerTickCount = 0;
+        bool foulderselected=false;
+        private string selectedsavepath;
         public SettingsWindow()
         {
             InitializeComponent();
@@ -36,9 +39,16 @@ namespace RFID_WPF_Autorization
             {
                 ToogleTheme.IsChecked = true;
             }
+            if (Settings.Default["SaveLogsPath"].ToString() != "None")
+            {
+                foulderselected = true;
+                selectedsavepath = Settings.Default["SaveLogsPath"].ToString();
+                SaveLabel.Content = selectedsavepath;
+            }
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += new EventHandler(Timer_Tick);
+            
         }
 
         private void ToogleTheme_Click(object sender, RoutedEventArgs e)
@@ -77,13 +87,29 @@ namespace RFID_WPF_Autorization
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+            if (foulderselected == true)
+            {
+                Settings.Default["SaveLogsPath"] = selectedsavepath;
+                Settings.Default.Save();
+                this.DialogResult = true;
+                this.Close();
+            }
+            else { MessageBox.Show("Заполните поле для сохранения", "Ошибка заполнения"); }
+
         }
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-           
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SaveLabel.Content = dialog.FileName;
+                selectedsavepath = dialog.FileName;
+                foulderselected = true;
+                MessageBox.Show($"Директория сохранения файлов для логов изменена:{selectedsavepath}","Изменение директории");
+            }
+            this.Activate();
         }
     }
 }

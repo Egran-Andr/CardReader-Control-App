@@ -18,7 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition />
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*"  MouseLeftButtonDown="Grid_MouseLeftButtonDown"/>
             <RowDefinition />
         </Grid.RowDefinitions>
         <Label x:Name="label" Content="Настройки" HorizontalContentAlignment="Center" Width="Auto" Grid.Row="0" FontSize="20" Height="Auto" Margin="0,0,0,0"/>
@@ -43,9 +43,9 @@
       Kind="MoonWaxingCrescent" />
             </materialDesign:ToggleButtonAssist.OnContent>
         </ToggleButton>
-        <Grid Grid.Row="2"  MouseLeftButtonDown="Grid_MouseLeftButtonDown" >
-            <Label x:Name="SaveLabel"   Content="Путь для сохранения" VerticalAlignment="Center" HorizontalAlignment="Left" MouseLeftButtonDown="Grid_MouseLeftButtonDown"></Label>
-            <materialDesign:PackIcon Kind="FolderOpen"  VerticalAlignment="Center" HorizontalAlignment="Right" Width="50" Foreground="LightGray" MouseLeftButtonDown="Grid_MouseLeftButtonDown"/>
+        <Grid Grid.Row="2"  MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+            <Label x:Name="SaveLabel"   Content="Путь для сохранения" VerticalAlignment="Center" HorizontalAlignment="Left" ></Label>
+            <materialDesign:PackIcon Kind="FolderOpen"  VerticalAlignment="Center" HorizontalAlignment="Right" Width="50" Foreground="LightGray"/>
         </Grid>
 
         
