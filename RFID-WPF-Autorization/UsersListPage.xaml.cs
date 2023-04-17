@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +26,13 @@ namespace RFID_WPF_Autorization
     {
         public ObservableCollection<string> list = new ObservableCollection<string>();
         List<WorkplaceReturnModel> workplaces = new List<WorkplaceReturnModel>();
+        List<WorkplaceUserConnection> userworkplace = new List<WorkplaceUserConnection>();
+        List<FullUser> users = new List<FullUser>();
+        ObservableCollection<FullUserReturn> usersloaded = new ObservableCollection<FullUserReturn>();
+        //List<FullUserReturn> usersloaded = new List<FullUserReturn>();
         NFCReader NFC = new NFCReader();
         int curentworkplaceid=0;
+        BitmapImage localimage;
 
         public UsersListPage()
         {
@@ -33,6 +40,8 @@ namespace RFID_WPF_Autorization
             list.Add("Любой отдел");
 
         }
+
+
         private  async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -48,15 +57,22 @@ namespace RFID_WPF_Autorization
                 }
                 CurrentWorkplace.ItemsSource = list;
                 CurrentWorkplace.SelectedIndex = 0;
+                await getUsers();
+                foreach (FullUser item in users)
+                {
+                    await Loadimage(item.id);
+                    usersloaded.Add(new FullUserReturn { id=item.id, workerfio = item.Name + " " + item.Surname + " " + item.lastname, workplacename = "Тест",gender=item.gender, datebirth=item.birthdate, photopath = localimage });
+                }
+
+                UsersListbox.ItemsSource = usersloaded;
                 //curentworkplaceid = workplaces.FirstOrDefault(t => t.Name == CurrentWorkplace.SelectedItem.ToString()).id;
-                
+
             }
             catch (Exception ex)
             {
 
                 MessageBox.Show("No reader connected.Please connect reader and reboot app", "CardReaded Error");
                 Application.Current.Shutdown();
-
             }
         }
 
@@ -108,6 +124,43 @@ namespace RFID_WPF_Autorization
             NFC.Disconnect();
         }
 
+        private static BitmapImage ByteArrayToImage(byte[] imageData)
+        {
+            if (imageData == null || imageData.Length == 0) return null;
+            var image = new BitmapImage();
+            using (var mem = new MemoryStream(imageData))
+            {
+                mem.Position = 0;
+                image.BeginInit();
+                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.UriSource = null;
+                image.StreamSource = mem;
+                image.EndInit();
+            }
+            image.Freeze();
+            return image;
+        }
 
+        private async Task Loadimage(int userid)
+        {
+            var photo = await ApiProcessor.LoadImage(userid);
+            localimage = ByteArrayToImage(photo);
+
+        }
+
+        private async Task getUsers()
+        {
+            users = await ApiProcessor.GetAllUsers();
+        }
+
+        private async void UsersListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UserUpdateDeleteModalWindow userDialog = new UserUpdateDeleteModalWindow(users[UsersListbox.SelectedIndex]); 
+            if (userDialog.ShowDialog() == true)
+            {
+                this.NavigationService.Refresh();
+            }
+        }
     }
 }

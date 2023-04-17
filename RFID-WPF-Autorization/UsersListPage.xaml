@@ -49,5 +49,53 @@
                 <materialDesign:PackIcon Kind="Settings"  />
             </Button>
         </Grid>
+
+        <ListView Grid.Row="1"
+                 Name="UsersListbox"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 HorizontalContentAlignment="Stretch" SelectionChanged="UsersListbox_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Image">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid >
+
+                                    <Image Source="{Binding photopath}" Height="80"  />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="ФИО"  Width="Auto" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <TextBlock Grid.Column="1"  Width="Auto"  Text="{Binding workerfio}"  HorizontalAlignment="Left" FontSize="20"  />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Место работы"  Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <TextBlock Grid.Column="1"  Width="Auto"  Text="{Binding workplacename}"  HorizontalAlignment="Left" FontSize="20"  />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Дата рождения"  Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <TextBlock Grid.Column="1"  Width="Auto"  Text="{Binding datebirth}"  HorizontalAlignment="Left" FontSize="20" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Page>
