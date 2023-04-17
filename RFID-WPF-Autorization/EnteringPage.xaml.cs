@@ -62,10 +62,16 @@ namespace RFID_WPF_Autorization
                 }
                 ListBoxData.ItemsSource = filteredhistory.Where(t => t.workplacename == CurrentWorkplace.Text);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("No reader connected.Please connect reader and reboot app", "CardReaded Error");
-                Application.Current.Shutdown();
+                if (ex.Message == "Not Found"){
+                    ListBoxData.ItemsSource = filteredhistory;
+                }
+                else
+                {
+                    MessageBox.Show("No reader connected.Please connect reader and reboot app", "CardReaded Error");
+                    Application.Current.Shutdown();
+                }
 
             }
         }
@@ -169,6 +175,11 @@ namespace RFID_WPF_Autorization
             SettingsWindow Settings_Child_wimdow = new SettingsWindow(); 
             Settings_Child_wimdow.ShowDialog();
 
+        }
+
+        private void UserlistButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("UsersListPage.xaml", UriKind.Relative));
         }
     }
 }

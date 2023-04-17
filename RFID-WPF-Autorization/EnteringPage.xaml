@@ -36,10 +36,10 @@
         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
                 <materialDesign:PackIcon Kind="History"  />
             </Button>
-            <Button  x:Name ="WorklistButton" Grid.Column="2" HorizontalAlignment="Right"
+            <Button  x:Name ="UserlistButton" Grid.Column="2" HorizontalAlignment="Right"
         Style="{StaticResource MaterialDesignIconButton}"
         ToolTip="Список сотрудников"
-        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
+        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="UserlistButton_Click">
                 <materialDesign:PackIcon Kind="AccountSupervisorCircle"  />
             </Button>
             <Button  x:Name ="SettingsButton" Grid.Column="3" HorizontalAlignment="Right"

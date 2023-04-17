@@ -92,8 +92,8 @@ namespace RFID_WPF_Autorization
                         catch (Exception e){ MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.");};
                         if (user.photopath != "default_user.jpeg") { await PushImage(userimagefile); }
                         NFC.WriteBlock(createduser.id.ToString(), "2");
-                        var returnbyte = NFC.ReadBlock("2");
-                        MessageBox.Show(System.Text.Encoding.Default.GetString(returnbyte));
+                        MessageBox.Show("Пользователь успешно создан","Успешно");
+                        this.NavigationService.Navigate(new UsersListPage());
                     }
                     else {
                         MessageBox.Show("Заполните все поля. Проверьте правильность ввода");
@@ -143,5 +143,9 @@ namespace RFID_WPF_Autorization
             var hostoryentry = await ApiProcessor.NewCardConnection(new CardConnectionModel { Userid = createdresponse.id, RFID_CardNumber = NFC.GetCardUID() });
         }
 
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new UsersListPage());
+        }
     }
 }
