@@ -39,7 +39,7 @@ namespace RFID_WPF_Autorization
 
             ITheme theme = palette.GetTheme();
 
-            if (Settings.Default["Theme"].ToString()=="Light")
+            if (Settings.Default["Theme"].ToString() == "Light")
             {
                 theme.SetBaseTheme(Theme.Light);
             }
@@ -48,7 +48,7 @@ namespace RFID_WPF_Autorization
                 theme.SetBaseTheme(Theme.Dark);
             }
             palette.SetTheme(theme);
-            
+
         }
         private static BitmapImage ByteArrayToImage(byte[] imageData)
         {
@@ -77,9 +77,9 @@ namespace RFID_WPF_Autorization
             var newuser = await ApiProcessor.CreateUser(user);
             MessageBox.Show(newuser.id.ToString(), "userLoaded");
         }
-        private async Task UpdateUser(int userid,UserModel user)
+        private async Task UpdateUser(int userid, UserModel user)
         {
-            var newuser = await ApiProcessor.UpdateUser(userid,user);
+            var newuser = await ApiProcessor.UpdateUser(userid, user);
         }
         private async Task Deleteuser(int userid)
         {
@@ -120,15 +120,15 @@ namespace RFID_WPF_Autorization
             var userhistorylist = await ApiProcessor.GetUserHistory(userid);
         }
 
-        private async Task GetConnectedCards(int userid=0)
+        private async Task GetConnectedCards(int userid = 0)
         {
             var connectedcardslist = await ApiProcessor.GetUserConnectedCards(userid);
         }
 
-        private async Task GetHistoryPeriod(DateTime begin,DateTime end, int userid = 0)
+        private async Task GetHistoryPeriod(DateTime begin, DateTime end, int userid = 0)
         {
-            string sqlformatbegin= begin.ToString("yyyy-MM-dd");
-            string sqlformatend= end.ToString("yyyy-MM-dd");
+            string sqlformatbegin = begin.ToString("yyyy-MM-dd");
+            string sqlformatend = end.ToString("yyyy-MM-dd");
             var periodhistory = await ApiProcessor.getPeriodHistory(sqlformatbegin, sqlformatend, userid);
             MessageBox.Show(periodhistory.Count.ToString());
         }
@@ -169,7 +169,7 @@ namespace RFID_WPF_Autorization
             var periodhistory = await ApiProcessor.getUserBalance(id);
             MessageBox.Show(periodhistory.balance.ToString(), periodhistory.workerid.ToString());
         }
-        private  async Task GetListBalances()
+        private async Task GetListBalances()
         {
             var balancelist = await ApiProcessor.getAllBalances();
             //MessageBox.Show(balancelist[0].balance.ToString(), balancelist[0].workerid.ToString());
@@ -215,75 +215,6 @@ namespace RFID_WPF_Autorization
 
             }
 
-
-            //WorkplaceModel model = new WorkplaceModel { Name = "Test" };
-            //HistoryModel modelhistory = new HistoryModel { workerid=3,workplaceid=1, entertimestamp=DateTime.Now};
-
-
-            //await Createuser(user);
-            //await LoadUser(4);
-            //await UpdateUser(1,user);
-            //await Deleteuser(1);
-            //await Loadimage(5);
-            //await PushImage("C:/Users/User/Downloads/1cid8j6nUmw.jpg");
-            //await getUsers();
-            //await CreateNewWorlplace(model);
-            //await CreateNewHistoryEntry(modelhistory);
-            //await GetHistoryById(3);
-            //await GetConnectedCards();
-            //await GetHistoryPeriod(new DateTime(2022, 1, 1, 0, 0, 0), new DateTime(2023, 4, 5, 0, 0, 0),4);
-            //await DeletecardByName("string");
-            //await GetAlWorkplaces();
-            //await CreateNewWorkplaceConn(new WorkplaceUserConnection { workerid=4,workplaceid=2 });
-            //await UpdateWorkplaceUserConn(new WorkplaceUserConnection { workerid=4,workplaceid=1 });
-            //await CreateNewGender(new GenderModel { title = "БАИВОЙ ВЕРТАЛЕТ" });
-            //await CreateNewBalance(new BalanceModel { workerid = 4, balance = 1000.20 });
-            //await UpdateBalance(new BalanceModel { workerid = 3, balance = 100000.15});
-            //await GetUserBalance(3);
-            //await GetListBalances();
         }
-        /*private async void Card_Inserted()
-        {
-            if (NFC.Connect())
-            {
-                //Do stuff like NFC.GetCardUID(); ...
-                Debug.WriteLine("Connected");
-                await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(async () =>
-                 {
-                     //testtext.Text = NFC.GetCardUID();
-                     Debug.WriteLine(NFC.ReadBlock("2"));
-                     Debug.WriteLine(NFC.WriteBlock("1", "2")); // returns boolean
-                     var returnbyte= NFC.ReadBlock("2");
-                     MessageBox.Show(System.Text.Encoding.Default.GetString(returnbyte));
-                     NFC.GetReadersList();
-                     //CardConnectionModel cardConnection = new CardConnectionModel { Userid = 3, RFID_CardNumber = NFC.GetCardUID() };
-                     //await CreateNewCardConnection(cardConnection);
-
-                     UserModel user = new UserModel
-                     {
-                         Name = "Dcbkbq",
-                         Surname = "Васильков",
-                         lastname = "Александрович",
-                         birthdate = "2022-02-10",
-                         gender = 1,
-                         photopath = "string"
-                     };
-
-                     await Createuser(user);
-                 }));
-            }
-            else
-            {
-                //Give error message about connection...
-                MessageBox.Show("Failed to find a reader connected to the system", "No reader connected");
-            }
-        }
-
-        private void CardRemoved()
-        {
-            Debug.WriteLine("Disconected");
-            //NFC.Disconnect();
-        }*/
-
     }
 }

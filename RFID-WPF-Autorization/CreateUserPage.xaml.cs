@@ -94,7 +94,8 @@ namespace RFID_WPF_Autorization
                         NFC.WriteBlock(createduser.id.ToString(), "2");
                         MessageBox.Show("Пользователь успешно создан","Успешно");
                         NFC.Disconnect();
-                        this.NavigationService.Navigate(new UsersListPage());
+                        System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                        Application.Current.Shutdown();
                     }
                     else {
                         MessageBox.Show("Заполните все поля. Проверьте правильность ввода");
@@ -111,13 +112,19 @@ namespace RFID_WPF_Autorization
         private async Task CardRemoved()
         {
             Debug.WriteLine("Card disconnected");
-            NFC.Disconnect();
+            
         }
 
         private async Task Createuser(UserModel user)
         {
             var createdresponse = await ApiProcessor.CreateUser(user);
             createduser = createdresponse;
+        }
+
+        private async Task GoBack()
+        {
+            NFC.Disconnect();
+            this.NavigationService.Navigate(new UsersListPage());
         }
 
         private async Task CreateNewCardConnection(CardConnectionModel model)
