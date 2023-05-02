@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class NFCReader
+public class NFCReader : IDisposable
 {
     public int retCode, hCard, Protocol;
     int hContext;
@@ -28,18 +28,27 @@ public class NFCReader
     private Card.SCARD_READERSTATE RdrState;
     private string readername;
     private Card.SCARD_READERSTATE[] states;
+
     private void WaitChangeStatus(object sender, DoWorkEventArgs e)
     {
+        BackgroundWorker worker = sender as BackgroundWorker;
+
         while (!e.Cancel)
         {
             int nErrCode = Card.SCardGetStatusChange(hContext, 1000, ref states[0], 1);
+
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+                return;
+            }
 
             if (nErrCode == Card.SCARD_E_SERVICE_STOPPED)
             {
                 DeviceDisconnected();
                 e.Cancel = true;
+                return;
             }
-
             //Check if the state changed from the last time.
             if ((this.states[0].RdrEventState & 2) == 2)
             {
@@ -62,13 +71,15 @@ public class NFCReader
                         case SmartcardState.Inserted:
                             {
                                 //MessageBox.Show("Card inserted");
-                                CardInserted();
+                                if (CardInserted != null)
+                                    CardInserted();
                                 break;
                             }
                         case SmartcardState.Ejected:
                             {
                                 //MessageBox.Show("Card ejected");
-                                CardEjected();
+                                if (CardEjected != null)
+                                    CardEjected();
                                 break;
                             }
                         default:
@@ -414,6 +425,11 @@ public class NFCReader
         if (connActive)
         {
             retCode = Card.SCardDisconnect(hCard, Card.SCARD_UNPOWER_CARD);
+            if (retCode == 0)
+            {
+                _worker?.CancelAsync();
+                connActive = false;
+            }
         }
         //retCode = Card.SCardReleaseContext(hCard);
     }
@@ -456,11 +472,45 @@ public class NFCReader
         states[0].RdrEventState = 0;
         states[0].ATRLength = 0;
         states[0].ATRValue = null;
-        this._worker = new BackgroundWorker();
-        this._worker.WorkerSupportsCancellation = true;
-        this._worker.DoWork += WaitChangeStatus;
-        this._worker.RunWorkerAsync();
+        _worker = new BackgroundWorker
+        {
+            WorkerSupportsCancellation = true
+        };
+
+        _worker.DoWork += WaitChangeStatus;
+        _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
+        _worker.RunWorkerAsync();
     }
+
+
+    private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    {
+        DisposeWorker();
+    }
+
+    public void Dispose()
+    {
+        Disconnect();
+        DisposeWorker();
+    }
+
+    private void DisposeWorker()
+    {
+        if (_worker != null)
+        {
+            if (_worker.IsBusy)
+            {
+                _worker.CancelAsync();
+                return;
+            }
+
+            _worker.DoWork -= WaitChangeStatus;
+            _worker.RunWorkerCompleted -= _worker_RunWorkerCompleted;
+            _worker.Dispose();
+            _worker = null;
+        }
+    }
+
     public NFCReader()
     {
     }

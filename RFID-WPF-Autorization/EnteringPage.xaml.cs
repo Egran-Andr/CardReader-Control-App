@@ -153,7 +153,6 @@ namespace RFID_WPF_Autorization
         private async Task CardRemoved()
         {
             Debug.WriteLine("Card disconnected");
-            NFC.Disconnect();
         }
 
         private void CurrentWorkplace_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -179,6 +178,7 @@ namespace RFID_WPF_Autorization
 
         private void UserlistButton_Click(object sender, RoutedEventArgs e)
         {
+            NFC.Disconnect();
             this.NavigationService.Navigate(new Uri("UsersListPage.xaml", UriKind.Relative));
         }
     }

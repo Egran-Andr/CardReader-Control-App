@@ -93,6 +93,7 @@ namespace RFID_WPF_Autorization
                         if (user.photopath != "default_user.jpeg") { await PushImage(userimagefile); }
                         NFC.WriteBlock(createduser.id.ToString(), "2");
                         MessageBox.Show("Пользователь успешно создан","Успешно");
+                        NFC.Disconnect();
                         this.NavigationService.Navigate(new UsersListPage());
                     }
                     else {

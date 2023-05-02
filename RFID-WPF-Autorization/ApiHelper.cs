@@ -19,6 +19,7 @@ namespace RFID_WPF_Autorization
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+
         }
     }
 }
