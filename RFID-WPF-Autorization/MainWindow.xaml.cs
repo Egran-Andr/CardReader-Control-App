@@ -22,6 +22,8 @@ using System.Drawing;
 using System.Net;
 using MaterialDesignThemes.Wpf;
 using RFID_WPF_Autorization.Properties;
+using System.Windows.Media.Animation;
+using System.Threading;
 
 namespace RFID_WPF_Autorization
 {
@@ -215,6 +217,62 @@ namespace RFID_WPF_Autorization
 
             }
 
+        }
+
+        private bool _allowDirectNavigation = false;
+        private NavigatingCancelEventArgs _navArgs = null;
+        private Duration _duration = new Duration(TimeSpan.FromSeconds(0.3));
+        private double _oldHeight = 0;
+        private void frame_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            if (Content != null && !_allowDirectNavigation)
+            {
+                e.Cancel = true;
+
+                _navArgs = e;
+                _oldHeight = _mainFrame.ActualHeight;
+
+                DoubleAnimation animation0 = new DoubleAnimation();
+                animation0.From = _mainFrame.ActualHeight;
+                animation0.To = 0;
+                animation0.Duration = _duration;
+                animation0.Completed += SlideCompleted;
+                _mainFrame.BeginAnimation(HeightProperty, animation0);
+            }
+            _allowDirectNavigation = false;
+        }
+
+        private void SlideCompleted(object sender, EventArgs e)
+        {
+            _allowDirectNavigation = true;
+            switch (_navArgs.NavigationMode)
+            {
+                case NavigationMode.New:
+                    if (_navArgs.Uri == null)
+                        _mainFrame.Navigate(_navArgs.Content);
+                    else
+                        _mainFrame.Navigate(_navArgs.Uri);
+                    break;
+                case NavigationMode.Back:
+                    _mainFrame.GoBack();
+                    break;
+                case NavigationMode.Forward:
+                    _mainFrame.GoForward();
+                    break;
+                case NavigationMode.Refresh:
+                    _mainFrame.Refresh();
+                    break;
+            }
+
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded,
+                (ThreadStart)delegate ()
+                {
+                    DoubleAnimation animation0 = new DoubleAnimation();
+                    animation0.From = 0;
+                    animation0.To = _oldHeight;
+                    animation0.Duration = _duration;
+                    _mainFrame.BeginAnimation(HeightProperty, animation0);
+                });
         }
     }
 }

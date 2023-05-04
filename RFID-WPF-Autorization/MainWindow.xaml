@@ -13,8 +13,8 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="MainWindow" Height="600" Width="1300" ResizeMode="NoResize" Loaded="Window_Loaded">
     <DockPanel>
-        <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden" />
+        <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden"/>
     </DockPanel>
 </Window>

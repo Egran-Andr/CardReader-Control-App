@@ -61,10 +61,9 @@ namespace RFID_WPF_Autorization
                 foreach (FullUser item in users)
                 {
                     await Loadimage(item.id);
-                    usersloaded.Add(new FullUserReturn { id=item.id, workerfio = item.Name + " " + item.Surname + " " + item.lastname, workplacename = "Тест",gender=item.gender, datebirth=item.birthdate, photopath = localimage });
+                    usersloaded.Add(new FullUserReturn { id=item.id, workerfio = item.Name + " " + item.Surname + " " + item.lastname, workplacename = "Тест",gender=item.gender, datebirth= DateTime.ParseExact(item.birthdate,"yyyy-MM-dd",null), photopath = localimage });
                 }
-
-                UsersListbox.ItemsSource = usersloaded;
+                UserDataGrid.ItemsSource = usersloaded;
                 //curentworkplaceid = workplaces.FirstOrDefault(t => t.Name == CurrentWorkplace.SelectedItem.ToString()).id;
 
             }
@@ -153,9 +152,11 @@ namespace RFID_WPF_Autorization
             users = await ApiProcessor.GetAllUsers();
         }
 
-        private async void UsersListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void UserDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UserUpdateDeleteModalWindow userDialog = new UserUpdateDeleteModalWindow(users[UsersListbox.SelectedIndex]); 
+            FullUserReturn clickeduser = (FullUserReturn)UserDataGrid.SelectedItem;
+            UserUpdateDeleteModalWindow userDialog = new UserUpdateDeleteModalWindow(users.Where(i => i.id.Equals(clickeduser.id)).First());
             if (userDialog.ShowDialog() == true)
             {
                 this.NavigationService.Refresh();

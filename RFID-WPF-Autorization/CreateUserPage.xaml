@@ -16,6 +16,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}" Loaded="Page_Loaded">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -23,36 +24,80 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Label x:Name="label" Content="Создание пользователя" HorizontalContentAlignment="Center" Width="Auto" Grid.Row="0" FontSize="20" Height="42" Margin="0,4,0,3"/>
-        <Button  x:Name ="BackButton" Grid.Column="0" HorizontalAlignment="Left"
+        <materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="ExpandIn" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Label x:Name="label" Content="Создание пользователя" HorizontalContentAlignment="Center" Width="Auto" Grid.Row="0" FontSize="20" Height="42" Margin="0,4,0,3"/>
+        </materialDesign:TransitioningContent>
+        <materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="ExpandIn" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Button  x:Name ="BackButton" Grid.Column="0" HorizontalAlignment="Left"
         Style="{StaticResource MaterialDesignIconButton}"
         ToolTip="Назад"
         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="BackButton_Click">
-            <materialDesign:PackIcon Kind="ArrowLeftCircle"  />
-        </Button>
-        <Image x:Name="UserNewImage" Height="201" Width="275" Source="default_user.jpeg" Stretch="Fill" Grid.Row="1" MouseLeftButtonDown="UserNewImage_MouseLeftButtonDown"/>
-        <TextBox Grid.Row="2" x:Name="NameText"
+                <materialDesign:PackIcon Kind="ArrowLeftCircle"  />
+            </Button>
+        </materialDesign:TransitioningContent>
+        <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}" Grid.Row="1">
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="SlideInFromLeft" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+
+            <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:1.2}" Grid.Row="1">
+                <materialDesign:TransitioningContent.OpeningEffects>
+                    <materialDesign:TransitionEffect Kind="FadeIn" />
+                </materialDesign:TransitioningContent.OpeningEffects>
+                <Viewbox>
+                <Border BorderThickness="7" CornerRadius="10,10,10,10"
+        BorderBrush="PaleTurquoise"
+        VerticalAlignment="Top">
+                    <Image x:Name="UserNewImage" Height="201" Width="275" Source="default_user.jpeg" Stretch="Fill" Grid.Row="1" MouseLeftButtonDown="UserNewImage_MouseLeftButtonDown"/>
+                </Border>
+            </Viewbox>
+            </materialDesign:TransitioningContent>
+        </materialDesign:TransitioningContent>
+        <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.5}" Grid.Row="3">
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="ExpandIn" />
+                <materialDesign:TransitionEffect Kind="SlideInFromLeft" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Border BorderBrush="LightCoral" CornerRadius="20,20,20,20" BorderThickness="4,4,4,4" Grid.Row="3" Margin="10,10,10,0">
+        <StackPanel Grid.Row="3" Margin="20,10,30,20" >
+            <TextBox  x:Name="NameText"
   materialDesign:HintAssist.Hint="Имя" Height="Auto"
-  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-  VerticalAlignment="Top" />
-        <TextBox Grid.Row="3" Height="Auto" x:Name="SurnameText"
+  Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox  Height="Auto" x:Name="SurnameText"
   materialDesign:HintAssist.Hint="Фамилия"
-  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-  VerticalAlignment="Top" />
-        <TextBox Grid.Row="3" Height="Auto" x:Name="LastNameText"
+  Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox  Height="Auto" x:Name="LastNameText"
   materialDesign:HintAssist.Hint="Отчество(необязательно)"
   Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-  VerticalAlignment="Top" Margin="0,36,0,0" />
-        <DatePicker Grid.Row="3" Height="Auto"  SelectedDateFormat="Long" 
+  VerticalAlignment="Top"  />
+            <DatePicker  Height="Auto"  SelectedDateFormat="Long" 
   Name="LocaleDatePicker"
-  materialDesign:HintAssist.Hint="Дата рождения" Margin="0,72,0,0" VerticalAlignment="Top" />
-        <ComboBox Grid.Row="3" Height="Auto" x:Name="genderbox"
-  materialDesign:HintAssist.Hint="Пол" Margin="0,101,0,0" VerticalAlignment="Top">
-            <ComboBoxItem
+  materialDesign:HintAssist.Hint="Дата рождения"  VerticalAlignment="Top" />
+            <ComboBox  Height="Auto" x:Name="genderbox"
+  materialDesign:HintAssist.Hint="Пол"  VerticalAlignment="Top">
+                <ComboBoxItem
     Content="Женский" />
-            <ComboBoxItem
+                <ComboBoxItem
     Content="Мужской" />
-        </ComboBox>
-        <Label  x:Name="comment" Content="После заполнения полей,приседините карточку для записи" HorizontalContentAlignment="Center" Width="Auto" Height="38" Grid.Row="3" FontSize="20" Margin="0,103,0,0" VerticalAlignment="Bottom"/>
+            </ComboBox>
+        </StackPanel>
+        </Border>
+        </materialDesign:TransitioningContent>
+        <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:1.05}" Grid.Row="3">
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="SlideInFromBottom" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Label  x:Name="comment" Content="После заполнения полей,приседините карточку для записи" HorizontalContentAlignment="Center" Width="Auto" Height="38" Grid.Row="3" FontSize="20" Margin="0,103,0,0" VerticalAlignment="Bottom"/>
+            </materialDesign:TransitioningContent>
     </Grid>
 </Page>

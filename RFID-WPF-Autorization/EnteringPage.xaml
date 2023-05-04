@@ -21,8 +21,12 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="6*"></RowDefinition>
         </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0" >
+        <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}" Grid.Row="0">
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="SlideInFromLeft" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -49,17 +53,25 @@
                 <materialDesign:PackIcon Kind="Settings"  />
             </Button>
         </Grid>
-        
+        </materialDesign:TransitioningContent>
+
+    <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}" Grid.Row="1">
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="SlideInFromRight" />
+            </materialDesign:TransitioningContent.OpeningEffects>
         <ListBox Grid.Row="1"
                  Name="ListBoxData"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  HorizontalContentAlignment="Stretch">
+
             <ListBox.ItemTemplate>
+
                 <DataTemplate>
                     <Border BorderBrush="LightGray" BorderThickness="2" HorizontalAlignment="Stretch" Width="Auto">
 
-                        <Grid Margin="5,5,5,5" Height="Auto">
+                        <Grid Margin="5,5,5,5" Height="Auto" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*" />
@@ -73,5 +85,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        </materialDesign:TransitioningContent>
     </Grid>
 </Page>

@@ -21,81 +21,67 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="6*"></RowDefinition>
         </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="10*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Button  x:Name ="BackButton" Grid.Column="0" HorizontalAlignment="Left"
+        <materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="ExpandIn" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Grid Grid.Row="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="10*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button  x:Name ="BackButton" Grid.Column="0" HorizontalAlignment="Left"
         Style="{StaticResource MaterialDesignIconButton}"
         ToolTip="Назад"
         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="BackButton_Click">
-                <materialDesign:PackIcon Kind="ArrowLeftCircle"  />
-            </Button>
-            <ComboBox x:Name ="CurrentWorkplace" BorderThickness="2" materialDesign:HintAssist.Hint="Фильтр отдела" ToolTip="Фильтр по отделу"  VerticalAlignment="Stretch" Margin="10,10,10,10" HorizontalAlignment="Stretch" Width="Auto" FontSize="20"  Grid.Column="1" SizeChanged="CurrentWorkplace_SizeChanged"  />
-            <Button  x:Name ="AddUserButton" Grid.Column="2" HorizontalAlignment="Right"
+                    <materialDesign:PackIcon Kind="ArrowLeftCircle"  />
+                </Button>
+                <ComboBox x:Name ="CurrentWorkplace" BorderThickness="2" materialDesign:HintAssist.Hint="Фильтр отдела" ToolTip="Фильтр по отделу"  VerticalAlignment="Stretch" Margin="10,10,10,10" HorizontalAlignment="Stretch" Width="Auto" FontSize="20"  Grid.Column="1" SizeChanged="CurrentWorkplace_SizeChanged"  />
+                <Button  x:Name ="AddUserButton" Grid.Column="2" HorizontalAlignment="Right"
         Style="{StaticResource MaterialDesignIconButton}"
         ToolTip="Добавить сотрудника"
         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="AddUserButton_Click">
-                <materialDesign:PackIcon Kind="AccountMultiplePlus"  />
-            </Button>
-            <Button  x:Name ="SettingsButton" Grid.Column="3" HorizontalAlignment="Right"
+                    <materialDesign:PackIcon Kind="AccountMultiplePlus"  />
+                </Button>
+                <Button  x:Name ="SettingsButton" Grid.Column="3" HorizontalAlignment="Right"
         Style="{StaticResource MaterialDesignIconButton}"
         ToolTip="Настройки"
         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="SettingsButton_Click">
-                <materialDesign:PackIcon Kind="Settings"  />
-            </Button>
-        </Grid>
+                    <materialDesign:PackIcon Kind="Settings"  />
+                </Button>
+            </Grid>
+        </materialDesign:TransitioningContent>
 
-        <ListView Grid.Row="1"
-                 Name="UsersListbox"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 HorizontalContentAlignment="Stretch" SelectionChanged="UsersListbox_SelectionChanged">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Image">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid >
+        <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:1.25}" Grid.Row="1" >
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="SlideInFromLeft" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <DataGrid Grid.Row="1" Name="UserDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" ColumnWidth="*" >
+                <DataGrid.Columns>
 
-                                    <Image Source="{Binding photopath}" Height="80"  />
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="ФИО"  Width="Auto" >
-                        <GridViewColumn.CellTemplate>
+                    <DataGridTemplateColumn Header= "Image" Width="1*">
+                        <DataGridTemplateColumn.CellTemplate>
+
                             <DataTemplate>
-                                <Grid >
-                                    <TextBlock Grid.Column="1"  Width="Auto"  Text="{Binding workerfio}"  HorizontalAlignment="Left" FontSize="20"  />
-                                </Grid>
+                                <Image Source="{Binding photopath}" Height="100"  />
                             </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Место работы"  Width="Auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid >
-                                    <TextBlock Grid.Column="1"  Width="Auto"  Text="{Binding workplacename}"  HorizontalAlignment="Left" FontSize="20"  />
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Дата рождения"  Width="Auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid >
-                                    <TextBlock Grid.Column="1"  Width="Auto"  Text="{Binding datebirth}"  HorizontalAlignment="Left" FontSize="20" />
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="ФИО" Width="3*"
+                                    Binding="{Binding workerfio}" FontSize="15" ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" CellStyle="{StaticResource MaterialDesignDataGridCell}"/>
+                    <DataGridTextColumn Header="Место работы" Binding="{Binding workplacename}" Width="2*" FontSize="20" ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" CellStyle="{StaticResource MaterialDesignDataGridCell}"/>
+                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding datebirth,StringFormat=\{0:dd.MM.yy\}}" Width="2*" FontSize="20" ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" CellStyle="{StaticResource MaterialDesignDataGridCell}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </materialDesign:TransitioningContent>
     </Grid>
 </Page>
+    

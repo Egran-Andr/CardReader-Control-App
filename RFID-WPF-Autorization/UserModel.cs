@@ -36,7 +36,7 @@ namespace RFID_WPF_Autorization
         public string workerfio { get; set; }
         public string workplacename { get; set; }
         public int gender { get; set; }
-        public string datebirth { get; set; }
+        public DateTime datebirth { get; set; }
         public BitmapImage photopath { get; set; }
     }
 
