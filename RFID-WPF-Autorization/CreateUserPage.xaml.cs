@@ -31,7 +31,6 @@ namespace RFID_WPF_Autorization
         public CreateUserPage()
         {
             InitializeComponent();
-
         }
 
         private void UserNewImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -94,12 +93,13 @@ namespace RFID_WPF_Autorization
                         NFC.WriteBlock(createduser.id.ToString(), "2");
                         MessageBox.Show("Пользователь успешно создан","Успешно");
                         NFC.Disconnect();
-                        System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                        Application.Current.Shutdown();
+                        ApiHelper.InitializeClient();
+                        this.NavigationService.Navigate(new UsersListPage());
                     }
                     else {
                         MessageBox.Show("Заполните все поля. Проверьте правильность ввода");
                     }
+
                 }));
             }
             else
@@ -121,11 +121,6 @@ namespace RFID_WPF_Autorization
             createduser = createdresponse;
         }
 
-        private async Task GoBack()
-        {
-            NFC.Disconnect();
-            this.NavigationService.Navigate(new UsersListPage());
-        }
 
         private async Task CreateNewCardConnection(CardConnectionModel model)
         {

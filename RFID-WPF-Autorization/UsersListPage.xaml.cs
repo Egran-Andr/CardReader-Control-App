@@ -70,7 +70,6 @@ namespace RFID_WPF_Autorization
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show("No reader connected.Please connect reader and reboot app", "CardReaded Error");
                 Application.Current.Shutdown();
             }
