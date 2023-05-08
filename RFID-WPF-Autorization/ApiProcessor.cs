@@ -406,5 +406,24 @@ namespace RFID_WPF_Autorization
                 }
             }
         }
+    //get user workplace
+        public static async Task<WorkplaceModel> getUserWorkplace(int id)
+        {
+            string url = $"/userworkpace/{id}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    WorkplaceReturnModel workplaceinfo = await response.Content.ReadAsAsync<WorkplaceReturnModel>();
+                    WorkplaceModel returnModel=new WorkplaceModel();
+                    returnModel.Name = workplaceinfo.Name;
+                    return returnModel;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace RFID_WPF_Autorization
         List<WorkplaceUserConnection> userworkplace = new List<WorkplaceUserConnection>();
         List<FullUser> users = new List<FullUser>();
         ObservableCollection<FullUserReturn> usersloaded = new ObservableCollection<FullUserReturn>();
-        //List<FullUserReturn> usersloaded = new List<FullUserReturn>();
+        WorkplaceModel modelwork = new WorkplaceModel();
         NFCReader NFC = new NFCReader();
         int curentworkplaceid=0;
         BitmapImage localimage;
@@ -61,10 +61,10 @@ namespace RFID_WPF_Autorization
                 foreach (FullUser item in users)
                 {
                     await Loadimage(item.id);
-                    usersloaded.Add(new FullUserReturn { id=item.id, workerfio = item.Name + " " + item.Surname + " " + item.lastname, workplacename = "Тест",gender=item.gender, datebirth= DateTime.ParseExact(item.birthdate,"yyyy-MM-dd",null), photopath = localimage });
+                    await getWorkplace(item.id);
+                    usersloaded.Add(new FullUserReturn { id=item.id, workerfio = item.Name + " " + item.Surname + " " + item.lastname, workplacename = modelwork.Name,gender=item.gender, datebirth= DateTime.ParseExact(item.birthdate,"yyyy-MM-dd",null), photopath = localimage });
                 }
                 UserDataGrid.ItemsSource = usersloaded;
-                //curentworkplaceid = workplaces.FirstOrDefault(t => t.Name == CurrentWorkplace.SelectedItem.ToString()).id;
 
             }
             catch (Exception ex)
@@ -151,16 +151,34 @@ namespace RFID_WPF_Autorization
         {
             users = await ApiProcessor.GetAllUsers();
         }
+        private async Task getWorkplace(int userid)
+        {
+            modelwork= await ApiProcessor.getUserWorkplace(userid);
+        }
 
 
         private void UserDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FullUserReturn clickeduser = (FullUserReturn)UserDataGrid.SelectedItem;
-            UserUpdateDeleteModalWindow userDialog = new UserUpdateDeleteModalWindow(users.Where(i => i.id.Equals(clickeduser.id)).First());
-            if (userDialog.ShowDialog() == true)
-            {
-                this.NavigationService.Refresh();
+            if (UserDataGrid.SelectedItem != null){
+                FullUserReturn clickeduser = (FullUserReturn)UserDataGrid.SelectedItem;
+                UserUpdateDeleteModalWindow userDialog = new UserUpdateDeleteModalWindow(users.Where(i => i.id.Equals(clickeduser.id)).First());
+                if (userDialog.ShowDialog() == true)
+                {
+                    this.NavigationService.Refresh();
+                }
             }
+
         }
+
+
+        private void CurrentWorkplace_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UserDataGrid.SelectedItem = null;
+        if (CurrentWorkplace.SelectedIndex == 0) { UserDataGrid.ItemsSource = usersloaded; }
+        else {
+        UserDataGrid.ItemsSource = usersloaded.Where(t => t.workplacename.Equals(CurrentWorkplace.SelectedItem.ToString()));
+        }
+        }
+
     }
 }

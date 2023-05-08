@@ -39,7 +39,7 @@
         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="BackButton_Click">
                     <materialDesign:PackIcon Kind="ArrowLeftCircle"  />
                 </Button>
-                <ComboBox x:Name ="CurrentWorkplace" BorderThickness="2" materialDesign:HintAssist.Hint="Фильтр отдела" ToolTip="Фильтр по отделу"  VerticalAlignment="Stretch" Margin="10,10,10,10" HorizontalAlignment="Stretch" Width="Auto" FontSize="20"  Grid.Column="1" SizeChanged="CurrentWorkplace_SizeChanged"  />
+                <ComboBox x:Name ="CurrentWorkplace" BorderThickness="2" materialDesign:HintAssist.Hint="Фильтр отдела" ToolTip="Фильтр по отделу"  VerticalAlignment="Stretch" Margin="10,10,10,10" HorizontalAlignment="Stretch" Width="Auto" FontSize="20"  Grid.Column="1" SizeChanged="CurrentWorkplace_SizeChanged" SelectionChanged="CurrentWorkplace_SelectionChanged"  />
                 <Button  x:Name ="AddUserButton" Grid.Column="2" HorizontalAlignment="Right"
         Style="{StaticResource MaterialDesignIconButton}"
         ToolTip="Добавить сотрудника"
@@ -60,7 +60,7 @@
                 <materialDesign:TransitionEffect Kind="FadeIn" />
                 <materialDesign:TransitionEffect Kind="SlideInFromLeft" />
             </materialDesign:TransitioningContent.OpeningEffects>
-            <DataGrid Grid.Row="1" Name="UserDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" ColumnWidth="*" >
+            <DataGrid Grid.Row="1" Name="UserDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" ColumnWidth="*" SelectionChanged="UserDataGrid_SelectionChanged" >
                 <DataGrid.Columns>
 
                     <DataGridTemplateColumn Header= "Image" Width="1*">
