@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,14 +23,21 @@ namespace RFID_WPF_Autorization
     {
         FullUser localuser = new FullUser();
         UserModel user = new UserModel();
+        public ObservableCollection<string> list = new ObservableCollection<string>();
+        List<WorkplaceReturnModel> workplaces = new List<WorkplaceReturnModel>();
+        WorkplaceModel modelwork = new WorkplaceModel();
+        int workplacepos;
+        int orgworkpos;
         public UserUpdateDeleteModalWindow()
         {
             InitializeComponent();
+            list.Add("Не назначено");
         }
         public UserUpdateDeleteModalWindow(FullUser user)
         {
             InitializeComponent();
             localuser = user;
+            list.Add("Не назначено");
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -46,6 +54,24 @@ namespace RFID_WPF_Autorization
             user.birthdate = LocaleDatePicker.DisplayDate.ToString("yyyy-MM-dd");
             user.gender = genderbox.SelectedIndex + 1;
             user.photopath = localuser.photopath;
+            if (workplacepos !=orgworkpos && workplacepos !=0)
+            {
+                if(orgworkpos == -1)//if user hadnt got any job-create new connection
+                {
+                    var item = workplaces.Where(t => t.Name.Equals(workbox.SelectedItem.ToString())).FirstOrDefault();
+                    MessageBox.Show(item.id.ToString(), item.Name);
+                    await CreateNewWorkplaceConn(new WorkplaceUserConnection { workerid=localuser.id,workplaceid=item.id});
+                }
+                else//update job if worker had any
+                {
+                    if(workplacepos != 0)
+                    {
+                        var item = workplaces.Where(t => t.Name.Equals(workbox.SelectedItem.ToString())).FirstOrDefault();
+                        MessageBox.Show(item.id.ToString(), item.Name);
+                        await UpdateWorkplaceUserConn(new WorkplaceUserConnection { workerid = localuser.id, workplaceid = item.id });
+                    }
+                }
+            }
             await UpdateUser(localuser.id, user);
             this.DialogResult = true;
             this.Close();
@@ -61,6 +87,11 @@ namespace RFID_WPF_Autorization
                 this.Close();
             }
 
+        }
+
+        private async Task CreateNewWorkplaceConn(WorkplaceUserConnection connection)
+        {
+            var periodhistory = await ApiProcessor.CreateNewUserWorkspaceConnection(connection);
         }
 
         private static BitmapImage ByteArrayToImage(byte[] imageData)
@@ -92,9 +123,24 @@ namespace RFID_WPF_Autorization
             var newuser = await ApiProcessor.DeleteUser(userid);
         }
 
+        private async Task UpdateWorkplaceUserConn(WorkplaceUserConnection connection)
+        {
+            var periodhistory = await ApiProcessor.UpdateUserWorkplace(connection);
+        }
+
         private async Task UpdateUser(int userid, UserModel user)
         {
             var newuser = await ApiProcessor.UpdateUser(userid, user);
+        }
+
+        private async Task GetAlWorkplaces()
+        {
+            workplaces = await ApiProcessor.GetWorkplaceList();
+        }
+
+        private async Task GetUserWork(int userid)
+        {
+            modelwork = await ApiProcessor.getUserWorkplace(userid);
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -111,6 +157,32 @@ namespace RFID_WPF_Autorization
                 genderbox.SelectedIndex = 1;
             }
             await Loadimage(localuser.id);
+            await GetAlWorkplaces();
+            foreach (WorkplaceReturnModel item in workplaces)
+            {
+                list.Add(item.Name);
+            }
+            workbox.ItemsSource = list;
+            await GetUserWork(localuser.id);
+            int index = workbox.Items.IndexOf(modelwork.Name);
+            if(index !=0)
+            {
+                workbox.SelectedItem = workbox.Items[index];
+                orgworkpos= workbox.SelectedIndex;
+                workplacepos = workbox.SelectedIndex;
+            }
+            else
+            {
+                workbox.SelectedIndex = 0;
+                orgworkpos = -1;
+                workplacepos = workbox.SelectedIndex;
+            }
+            
+        }
+
+        private void workbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            workplacepos = workbox.SelectedIndex;
         }
     }
 }

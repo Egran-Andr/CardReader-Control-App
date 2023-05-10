@@ -116,6 +116,7 @@ namespace RFID_WPF_Autorization
                             NFC.WriteBlock(createduser.id.ToString(), "2");
                             MessageBox.Show("Пользователь успешно создан", "Успешно");
                             NFC.Disconnect();
+                            NFC.Dispose();
                             ApiHelper.InitializeClient();
                             this.NavigationService.Navigate(new UsersListPage());
                         }

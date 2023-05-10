@@ -30,7 +30,6 @@ namespace RFID_WPF_Autorization
         List<FullUser> users = new List<FullUser>();
         ObservableCollection<FullUserReturn> usersloaded = new ObservableCollection<FullUserReturn>();
         WorkplaceModel modelwork = new WorkplaceModel();
-        NFCReader NFC = new NFCReader();
         int curentworkplaceid=0;
         BitmapImage localimage;
 
@@ -46,10 +45,6 @@ namespace RFID_WPF_Autorization
         {
             try
             {
-                NFC.CardInserted += new NFCReader.CardEventHandler(Card_Inserted);
-                //Ejected Event
-                NFC.CardEjected += new NFCReader.CardEventHandler(CardRemoved);
-                NFC.Watch();
                 await GetAlWorkplaces();
                 foreach (WorkplaceReturnModel item in workplaces)
                 {
@@ -98,28 +93,6 @@ namespace RFID_WPF_Autorization
         private async Task GetAlWorkplaces()
         {
             workplaces = await ApiProcessor.GetWorkplaceList();
-        }
-
-
-        private async Task Card_Inserted()
-        {
-            if (NFC.Connect())
-            {
-                await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(async () =>
-                {
-                }));
-            }
-            else
-            {
-                //Give error message about connection...
-                MessageBox.Show("Failed to find a reader connected to the system", "No reader connected");
-            }
-        }
-
-
-        private async Task CardRemoved()
-        {
-            NFC.Disconnect();
         }
 
         private static BitmapImage ByteArrayToImage(byte[] imageData)

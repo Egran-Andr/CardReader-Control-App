@@ -17,9 +17,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition />
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label x:Name="label" Content="Информация о пользователе" HorizontalContentAlignment="Center" Width="Auto" Grid.Row="0" FontSize="20" Height="42" Margin="0,4,0,3"/>
         <Button  x:Name ="BackButton" Grid.Column="0" HorizontalAlignment="Left"
@@ -28,30 +28,37 @@
         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="BackButton_Click">
             <materialDesign:PackIcon Kind="ArrowLeftCircle"  />
         </Button>
-        <Image x:Name="UserImage" Height="201" Width="275" Source="default_user.jpeg" Stretch="Fill" Grid.Row="1"/>
-        <TextBox Grid.Row="2" x:Name="NameText" 
+        <Image x:Name="UserImage" Height="Auto" Width="275" Source="default_user.jpeg" Stretch="Fill" Grid.Row="1"/>
+        <materialDesign:PackIcon Kind="Information" Foreground="{DynamicResource MaterialDesignTextFieldBoxBackground}" ToolTip="Для изменения или добавления карточки пользователя, поднисите ее к считывателю"  Grid.Row="1" HorizontalAlignment="Right" Width="50" Height="50" />
+        <StackPanel Grid.Row="2">
+            <TextBox  x:Name="NameText" 
   materialDesign:HintAssist.Hint="Имя" Height="Auto"
   Style="{StaticResource MaterialDesignFloatingHintTextBox}"
   VerticalAlignment="Top" />
-        <TextBox Grid.Row="3" Height="Auto" x:Name="SurnameText"
+            <TextBox  Height="Auto" x:Name="SurnameText"
   materialDesign:HintAssist.Hint="Фамилия"
   Style="{StaticResource MaterialDesignFloatingHintTextBox}"
   VerticalAlignment="Top" />
-        <TextBox Grid.Row="3" Height="Auto" x:Name="LastNameText"
+            <TextBox  Height="Auto" x:Name="LastNameText"
   materialDesign:HintAssist.Hint="Отчество"
   Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-  VerticalAlignment="Top" Margin="0,36,0,0" />
-        <DatePicker Grid.Row="3" Height="Auto"  SelectedDateFormat="Long" 
+  VerticalAlignment="Top"  />
+            <DatePicker  Height="Auto"  SelectedDateFormat="Long" 
   Name="LocaleDatePicker"
-  materialDesign:HintAssist.Hint="Дата рождения" Margin="0,72,0,0" VerticalAlignment="Top" />
-        <ComboBox Grid.Row="3" Height="Auto" x:Name="genderbox"
-  materialDesign:HintAssist.Hint="Пол" Margin="0,101,0,0" VerticalAlignment="Top">
-            <ComboBoxItem
+  materialDesign:HintAssist.Hint="Дата рождения"  VerticalAlignment="Top" />
+            <ComboBox  Height="Auto" x:Name="genderbox"
+  materialDesign:HintAssist.Hint="Пол"  VerticalAlignment="Top">
+                <ComboBoxItem
     Content="Женский" />
-            <ComboBoxItem
+                <ComboBoxItem
     Content="Мужской" />
-        </ComboBox>
-        <Grid Grid.Row="3" Margin="0,124,0,0">
+            </ComboBox>
+            <ComboBox  Height="Auto" x:Name="workbox"
+  materialDesign:HintAssist.Hint="Место работы"  VerticalAlignment="Top" SelectionChanged="workbox_SelectionChanged">
+            </ComboBox>
+        </StackPanel>
+        
+        <Grid Grid.Row="3" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition  Width="*"></ColumnDefinition>
