@@ -37,7 +37,7 @@
             <Button  x:Name ="HistoryButton" Grid.Column="1" HorizontalAlignment="Right"
         Style="{StaticResource MaterialDesignIconButton}"
         ToolTip="история посещения"
-        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
+        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Click="HistoryButton_Click">
                 <materialDesign:PackIcon Kind="History"  />
             </Button>
             <Button  x:Name ="UserlistButton" Grid.Column="2" HorizontalAlignment="Right"

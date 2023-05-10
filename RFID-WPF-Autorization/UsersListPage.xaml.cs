@@ -180,5 +180,14 @@ namespace RFID_WPF_Autorization
         }
         }
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UserDataGrid.SelectedItem = null;
+            if (CurrentWorkplace.SelectedIndex == 0) { UserDataGrid.ItemsSource = usersloaded.Where(t=>t.workerfio.ToLower().Contains(FioText.Text.ToLower()));}
+            else
+            {
+                UserDataGrid.ItemsSource = usersloaded.Where(t => t.workplacename.Equals(CurrentWorkplace.SelectedItem.ToString()) && t.workerfio.ToLower().Contains(FioText.Text.ToLower()));
+            }
+        }
     }
 }

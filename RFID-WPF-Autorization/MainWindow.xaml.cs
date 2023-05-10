@@ -32,7 +32,6 @@ namespace RFID_WPF_Autorization
     /// </summary>
     public partial class MainWindow : Window
     {
-        //NFCReader NFC = new NFCReader();
         public MainWindow()
         {
             InitializeComponent();

@@ -33,6 +33,9 @@ namespace RFID_WPF_Autorization
         UserModel loadeduserinfo = new UserModel();
         List<HistoryReturnModel> filteredhistory = new List<HistoryReturnModel>();
         int curentworkplaceid;
+        bool checkcreation = false;
+        private int timerTickCount = 0;
+        private DispatcherTimer timer;
         public EnteringPage()
         {
             InitializeComponent();
@@ -110,15 +113,24 @@ namespace RFID_WPF_Autorization
 
                     DateTime datenow = DateTime.Now;
 
+
                     if (int.TryParse(userid.Split("\0")[0], out var number))
                     {
-                       
-                        await CreateNewHistoryEntry(new HistoryModel
-                        {
-                            workerid = number,
-                            workplaceid = curentworkplaceid,
-                            entertimestamp = datenow
-                        });
+                       if (checkcreation == false) {
+                            await CreateNewHistoryEntry(new HistoryModel
+                            {
+                                workerid = number,
+                                workplaceid = curentworkplaceid,
+                                entertimestamp = datenow
+                            });
+                        }
+
+                        checkcreation = true;
+                        timer = new DispatcherTimer();
+                        timer.Interval = new TimeSpan(0, 0, 1);
+                        timer.Tick += new EventHandler(Timer_Tick);
+                        timer.Start();
+
                         await LoadUser(number);
                         filteredhistory.Add(new HistoryReturnModel { workerfio = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id == curentworkplaceid).Name, entertimestamp = datenow.ToString("dd/MM/yyyy HH:mm:ss") });
                         OpenShowUserWindow(loadeduserinfo, number);
@@ -179,7 +191,25 @@ namespace RFID_WPF_Autorization
         private void UserlistButton_Click(object sender, RoutedEventArgs e)
         {
             NFC.Disconnect();
+            NFC.Dispose();
             this.NavigationService.Navigate(new Uri("UsersListPage.xaml", UriKind.Relative));
+        }
+
+        private void HistoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            NFC.Disconnect();
+            NFC.Dispose();
+            this.NavigationService.Navigate(new Uri("HistoryExportPage.xaml", UriKind.Relative));
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            DispatcherTimer timer = (DispatcherTimer)sender;
+            if (++timerTickCount >= 0.5)
+            {
+                timer.Stop();
+                checkcreation = false;
+            }
         }
     }
 }

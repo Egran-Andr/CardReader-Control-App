@@ -12,6 +12,7 @@
                                              PrimaryColor="Blue"
                                              SecondaryColor="Red" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="MaterialDesignWpfDemoStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- MATERIAL DESIGN -->
         </ResourceDictionary>

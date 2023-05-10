@@ -28,6 +28,7 @@ namespace RFID_WPF_Autorization
         FullUser createduser = new FullUser();
         string cardid;
         UserModel user = new UserModel();
+        bool createsignal = false;
         public CreateUserPage()
         {
             InitializeComponent();
@@ -88,13 +89,37 @@ namespace RFID_WPF_Autorization
                         try { 
                             await CreateNewCardConnection(new CardConnectionModel { Userid = createduser.id, RFID_CardNumber = NFC.GetCardUID() });
                         }
-                        catch (Exception e){ MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.");};
-                        if (user.photopath != "default_user.jpeg") { await PushImage(userimagefile); }
-                        NFC.WriteBlock(createduser.id.ToString(), "2");
-                        MessageBox.Show("Пользователь успешно создан","Успешно");
-                        NFC.Disconnect();
-                        ApiHelper.InitializeClient();
-                        this.NavigationService.Navigate(new UsersListPage());
+                        catch (Exception e){
+                            if (MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.",
+                    "Потдтвердить изменение",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            {
+                                await DeleteCardCon(NFC.GetCardUID());
+                                await CreateNewCardConnection(new CardConnectionModel { Userid = createduser.id, RFID_CardNumber = NFC.GetCardUID()});
+                                if (user.photopath != "default_user.jpeg") { await PushImage(userimagefile); }
+                                NFC.WriteBlock(createduser.id.ToString(), "2");
+                                MessageBox.Show("Пользователь успешно создан", "Успешно");
+                                createsignal = true;
+                                NFC.Disconnect();
+                                ApiHelper.InitializeClient();
+                                this.NavigationService.Navigate(new UsersListPage());
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        };
+                        if (createsignal == false)
+                        {
+                            if (user.photopath != "default_user.jpeg") { await PushImage(userimagefile); }
+                            NFC.WriteBlock(createduser.id.ToString(), "2");
+                            MessageBox.Show("Пользователь успешно создан", "Успешно");
+                            NFC.Disconnect();
+                            ApiHelper.InitializeClient();
+                            this.NavigationService.Navigate(new UsersListPage());
+                        }
+
                     }
                     else {
                         MessageBox.Show("Заполните все поля. Проверьте правильность ввода");
@@ -107,6 +132,19 @@ namespace RFID_WPF_Autorization
                 //Give error message about connection...
                 MessageBox.Show("Failed to find a reader connected to the system", "No reader connected");
             }
+        }
+
+        private async Task DeleteCardCon(string v)
+        {
+            try
+            {
+                var createdresponse = await ApiProcessor.deleteCardconnection(v);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException($"CreatingError");
+            }
+            
         }
 
         private async Task CardRemoved()
@@ -148,6 +186,8 @@ namespace RFID_WPF_Autorization
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            NFC.Disconnect();
+            NFC.Dispose();
             this.NavigationService.Navigate(new UsersListPage());
         }
     }
