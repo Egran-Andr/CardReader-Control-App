@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace RFID_WPF_Autorization
 {
@@ -26,12 +28,15 @@ namespace RFID_WPF_Autorization
         public ObservableCollection<string> list = new ObservableCollection<string>();
         List<WorkplaceReturnModel> workplaces = new List<WorkplaceReturnModel>();
         WorkplaceModel modelwork = new WorkplaceModel();
+        NFCReader NFC = new NFCReader();
         int workplacepos;
         int orgworkpos;
+        bool createsignal = false;
         public UserUpdateDeleteModalWindow()
         {
             InitializeComponent();
             list.Add("Не назначено");
+
         }
         public UserUpdateDeleteModalWindow(FullUser user)
         {
@@ -73,6 +78,8 @@ namespace RFID_WPF_Autorization
                 }
             }
             await UpdateUser(localuser.id, user);
+            NFC.Disconnect();
+            NFC.Dispose();
             this.DialogResult = true;
             this.Close();
         }
@@ -145,6 +152,10 @@ namespace RFID_WPF_Autorization
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            NFC.CardInserted += new NFCReader.CardEventHandler(Card_Inserted);
+            //Ejected Event
+            NFC.CardEjected += new NFCReader.CardEventHandler(CardRemoved);
+            NFC.Watch();
             NameText.Text = localuser.Name;
             SurnameText.Text = localuser.Surname;
             LastNameText.Text = localuser.lastname;
@@ -183,6 +194,87 @@ namespace RFID_WPF_Autorization
         private void workbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             workplacepos = workbox.SelectedIndex;
+        }
+
+        private async Task CreateNewCardConnection(CardConnectionModel model)
+        {
+            try
+            {
+                var hostoryentry = await ApiProcessor.NewCardConnection(model);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException($"Card with this uid is already created");
+            }
+        }
+
+        private async Task Card_Inserted()
+        {
+            if (NFC.Connect())
+            {
+                await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(async () =>
+                {
+                        try
+                        {
+                            await CreateNewCardConnection(new CardConnectionModel { Userid = localuser.id, RFID_CardNumber = NFC.GetCardUID() });
+                        }
+                        catch (Exception e)
+                        {
+                            if (MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.",
+                    "Потдтвердить изменение",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            {
+                                await DeleteCardCon(NFC.GetCardUID());
+                                await CreateNewCardConnection(new CardConnectionModel { Userid = localuser.id, RFID_CardNumber = NFC.GetCardUID() });
+                            NFC.WriteBlock(localuser.id.ToString(), "2");
+                                MessageBox.Show("Карточка перезаписанна", "Успешно");
+                                createsignal = true;
+                                NFC.Disconnect();
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        };
+                        if (createsignal == false)
+                        {
+                            NFC.WriteBlock(localuser.id.ToString(), "2");
+                            MessageBox.Show("Пользователь успешно создан", "Успешно");
+                            NFC.Disconnect();
+                        }
+
+                    
+                    else
+                    {
+                        MessageBox.Show("Заполните все поля. Проверьте правильность ввода");
+                    }
+
+                }));
+            }
+            else
+            {
+                //Give error message about connection...
+                MessageBox.Show("Failed to find a reader connected to the system", "No reader connected");
+            }
+        }
+        private async Task DeleteCardCon(string v)
+        {
+            try
+            {
+                var createdresponse = await ApiProcessor.deleteCardconnection(v);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException($"CreatingError");
+            }
+
+        }
+
+        private async Task CardRemoved()
+        {
+            Debug.WriteLine("Card disconnected");
+
         }
     }
 }
