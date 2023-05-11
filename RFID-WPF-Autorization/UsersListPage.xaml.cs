@@ -53,13 +53,16 @@ namespace RFID_WPF_Autorization
                 CurrentWorkplace.ItemsSource = list;
                 CurrentWorkplace.SelectedIndex = 0;
                 await getUsers();
+                double percent = 100 / (double)users.Count();
                 foreach (FullUser item in users)
                 {
+                    AnimatedProgressInCard.Value += percent;
                     await Loadimage(item.id);
                     await getWorkplace(item.id);
                     usersloaded.Add(new FullUserReturn { id=item.id, workerfio = item.Name + " " + item.Surname + " " + item.lastname, workplacename = modelwork.Name,gender=item.gender, datebirth= DateTime.ParseExact(item.birthdate,"yyyy-MM-dd",null), photopath = localimage });
                 }
                 UserDataGrid.ItemsSource = usersloaded;
+                AnimatedProgressInCard.Visibility = System.Windows.Visibility.Collapsed;
 
             }
             catch (Exception ex)

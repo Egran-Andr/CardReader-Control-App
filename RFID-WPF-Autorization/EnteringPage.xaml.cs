@@ -58,12 +58,16 @@ namespace RFID_WPF_Autorization
                 CurrentWorkplace.SelectedIndex = 0;
                 curentworkplaceid = workplaces.FirstOrDefault(t => t.Name == CurrentWorkplace.SelectedItem.ToString()).id;
                 await GetHistoryPeriod(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1));
+                double percent =  100/ (double)history.Count();
                 foreach (HistoryModel item in history)
                 {
+                    AnimatedProgressInCard.Value += percent;
                     await LoadUser(item.workerid);
                     filteredhistory.Add(new HistoryReturnModel { workerfio=loadeduserinfo.Name+" "+ loadeduserinfo.Surname+" "+loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id==item.workplaceid).Name,entertimestamp =item.entertimestamp.ToString("dd/MM/yyyy HH:mm:ss") });
+                    ListBoxData.ItemsSource = filteredhistory.Where(t => t.workplacename == CurrentWorkplace.Text);
                 }
-                ListBoxData.ItemsSource = filteredhistory.Where(t => t.workplacename == CurrentWorkplace.Text);
+                AnimatedProgressInCard.Visibility = System.Windows.Visibility.Collapsed;
+
             }
             catch (Exception ex)
             {

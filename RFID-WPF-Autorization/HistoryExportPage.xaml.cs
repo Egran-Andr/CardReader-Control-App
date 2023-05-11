@@ -50,11 +50,13 @@ namespace RFID_WPF_Autorization
                 {
                     await LoadUser(item.workerid);
                     filteredhistory.Add(new HistoryReturnModelDate { workerfio = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id == item.workplaceid).Name, entertimestamp = item.entertimestamp});
+                    ExportNumber.Text = $"Количество записей для импорта: {filteredhistory.Count}";
+                    HistorydataGrid.ItemsSource = filteredhistory;
                 }
                 BeginDate.SelectedDate = DateTime.Now.AddYears(-20);
                 EndDate.SelectedDate = DateTime.Now.AddDays(1);
-                HistorydataGrid.ItemsSource = filteredhistory;
-                ExportNumber.Text = $"Количество записей для импорта: {filteredhistory.Count}";
+
+
             }
             catch (Exception ex)
             {
