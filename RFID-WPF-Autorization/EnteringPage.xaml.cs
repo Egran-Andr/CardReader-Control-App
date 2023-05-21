@@ -1,23 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using RFID_WPF_Autorization.Properties;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using Newtonsoft.Json;
-using RFID_WPF_Autorization.Properties;
 
 namespace RFID_WPF_Autorization
 {
@@ -58,12 +50,12 @@ namespace RFID_WPF_Autorization
                 CurrentWorkplace.SelectedIndex = 0;
                 curentworkplaceid = workplaces.FirstOrDefault(t => t.Name == CurrentWorkplace.SelectedItem.ToString()).id;
                 await GetHistoryPeriod(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1));
-                double percent =  100/ (double)history.Count();
+                double percent = 100 / (double)history.Count();
                 foreach (HistoryModel item in history)
                 {
                     AnimatedProgressInCard.Value += percent;
                     await LoadUser(item.workerid);
-                    filteredhistory.Add(new HistoryReturnModel { workerfio=loadeduserinfo.Name+" "+ loadeduserinfo.Surname+" "+loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id==item.workplaceid).Name,entertimestamp =item.entertimestamp.ToString("dd/MM/yyyy HH:mm:ss") });
+                    filteredhistory.Add(new HistoryReturnModel { workerfio = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id == item.workplaceid).Name, entertimestamp = item.entertimestamp.ToString("dd/MM/yyyy HH:mm:ss") });
                     ListBoxData.ItemsSource = filteredhistory.Where(t => t.workplacename == CurrentWorkplace.Text);
                 }
                 AnimatedProgressInCard.Visibility = System.Windows.Visibility.Collapsed;
@@ -71,7 +63,8 @@ namespace RFID_WPF_Autorization
             }
             catch (Exception ex)
             {
-                if (ex.Message == "Not Found"){
+                if (ex.Message == "Not Found")
+                {
                     ListBoxData.ItemsSource = filteredhistory;
                 }
                 else
@@ -89,7 +82,7 @@ namespace RFID_WPF_Autorization
             string sqlformatbegin = begin.ToString("yyyy-MM-dd");
             string sqlformatend = end.ToString("yyyy-MM-dd");
             history = await ApiProcessor.getPeriodHistory(sqlformatbegin, sqlformatend, userid);
-            
+
         }
 
         private async Task GetAlWorkplaces()
@@ -120,7 +113,8 @@ namespace RFID_WPF_Autorization
 
                     if (int.TryParse(userid.Split("\0")[0], out var number))
                     {
-                       if (checkcreation == false) {
+                        if (checkcreation == false)
+                        {
                             await CreateNewHistoryEntry(new HistoryModel
                             {
                                 workerid = number,
@@ -138,10 +132,10 @@ namespace RFID_WPF_Autorization
                         await LoadUser(number);
                         filteredhistory.Add(new HistoryReturnModel { workerfio = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id == curentworkplaceid).Name, entertimestamp = datenow.ToString("dd/MM/yyyy HH:mm:ss") });
                         OpenShowUserWindow(loadeduserinfo, number);
-                        filteredhistory =filteredhistory.OrderByDescending(o=>o.entertimestamp).ToList();
+                        filteredhistory = filteredhistory.OrderByDescending(o => o.entertimestamp).ToList();
                         ListBoxData.ItemsSource = filteredhistory.Where(t => t.workplacename == CurrentWorkplace.Text);
 
-                        string filepath = Settings.Default["SaveLogsPath"].ToString() +"\\"+ DateTime.Now.ToString("dd-MM-yyyy") + "-log.json";
+                        string filepath = Settings.Default["SaveLogsPath"].ToString() + "\\" + DateTime.Now.ToString("dd-MM-yyyy") + "-log.json";
                         string str = JsonConvert.SerializeObject(
                           new
                           {
@@ -151,7 +145,7 @@ namespace RFID_WPF_Autorization
                           }
                         );
                         //File.AppendAllText(filepath, String.Format("FIO :{0} ; workplace_entered : {1}; entertime : {2}; \n", loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplaces.FirstOrDefault(t => t.id == curentworkplaceid).Name, datenow.ToString("dd/MM/yyyy HH:mm:ss")));
-                        File.AppendAllText(filepath,str);
+                        File.AppendAllText(filepath, str);
                     }
                     else
                     { MessageBox.Show("Данные на карточке не были записанны", "Ошибка чтения"); }
@@ -178,16 +172,16 @@ namespace RFID_WPF_Autorization
             MessageBox.Show($"Отслеживание прохода в отдел {CurrentWorkplace.SelectedItem.ToString()} номер в БД: {curentworkplaceid}", "Смена прохода");
         }
 
-        public void OpenShowUserWindow(UserModel person,int id)
+        public void OpenShowUserWindow(UserModel person, int id)
         {
 
-            ModalWindowShowUser FirstNameWindow_Child = new ModalWindowShowUser(person,id);
+            ModalWindowShowUser FirstNameWindow_Child = new ModalWindowShowUser(person, id);
             FirstNameWindow_Child.Show();
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow Settings_Child_wimdow = new SettingsWindow(); 
+            SettingsWindow Settings_Child_wimdow = new SettingsWindow();
             Settings_Child_wimdow.ShowDialog();
 
         }

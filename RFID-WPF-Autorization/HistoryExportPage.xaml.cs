@@ -2,17 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RFID_WPF_Autorization
 {
@@ -49,7 +41,7 @@ namespace RFID_WPF_Autorization
                 foreach (HistoryModel item in history)
                 {
                     await LoadUser(item.workerid);
-                    filteredhistory.Add(new HistoryReturnModelDate { workerfio = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id == item.workplaceid).Name, entertimestamp = item.entertimestamp});
+                    filteredhistory.Add(new HistoryReturnModelDate { workerfio = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id == item.workplaceid).Name, entertimestamp = item.entertimestamp });
                     ExportNumber.Text = $"Количество записей для экспорта: {filteredhistory.Count}";
                     HistorydataGrid.ItemsSource = filteredhistory;
                 }
@@ -92,9 +84,10 @@ namespace RFID_WPF_Autorization
 
         private void FioText_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Workplacefilter.SelectedIndex == 0) {
+            if (Workplacefilter.SelectedIndex == 0)
+            {
 
-                if(BeginDate.SelectedDate.HasValue && EndDate.SelectedDate.HasValue)
+                if (BeginDate.SelectedDate.HasValue && EndDate.SelectedDate.HasValue)
                 {
                     HistorydataGrid.ItemsSource = filteredhistory.Where(t => t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value && t.workerfio.ToLower().Contains(FioText.Text.ToLower()));
                     historycopy = filteredhistory.Where(t => t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value && t.workerfio.ToLower().Contains(FioText.Text.ToLower())).ToList();
@@ -119,17 +112,18 @@ namespace RFID_WPF_Autorization
                     HistorydataGrid.ItemsSource = filteredhistory.Where(t => t.workplacename.Equals(Workplacefilter.SelectedItem.ToString()) && t.workerfio.ToLower().Contains(FioText.Text.ToLower()));
                     historycopy = filteredhistory.Where(t => t.workplacename.Equals(Workplacefilter.SelectedItem.ToString()) && t.workerfio.ToLower().Contains(FioText.Text.ToLower())).ToList();
                 }
-                
+
             }
             ExportNumber.Text = $"Количество записей для экспорта: {historycopy.Count}";
         }
 
-        private  void BeginDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void BeginDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (EndDate.SelectedDate != null) {
+            if (EndDate.SelectedDate != null)
+            {
                 if (Workplacefilter.SelectedIndex == 0)
                 {
-                    HistorydataGrid.ItemsSource = filteredhistory.Where(t => t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value  && t.workerfio.ToLower().Contains(FioText.Text.ToLower()));
+                    HistorydataGrid.ItemsSource = filteredhistory.Where(t => t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value && t.workerfio.ToLower().Contains(FioText.Text.ToLower()));
                     historycopy = filteredhistory.Where(t => t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value && t.workerfio.ToLower().Contains(FioText.Text.ToLower())).ToList();
                 }
                 else
@@ -145,7 +139,7 @@ namespace RFID_WPF_Autorization
             }
         }
 
-        private  void EndDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void EndDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (BeginDate.SelectedDate != null)
             {
@@ -164,7 +158,7 @@ namespace RFID_WPF_Autorization
             }
             else
             {
-               
+
             }
         }
 

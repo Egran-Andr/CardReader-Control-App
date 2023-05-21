@@ -1,19 +1,11 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace RFID_WPF_Autorization
@@ -23,7 +15,7 @@ namespace RFID_WPF_Autorization
     /// </summary>
     public partial class CreateUserPage : Page
     {
-        string userimagefile= "default_user.jpeg";//полный путь к фотографии пользователя на компе клиента
+        string userimagefile = "default_user.jpeg";//полный путь к фотографии пользователя на компе клиента
         NFCReader NFC = new NFCReader();
         FullUser createduser = new FullUser();
         string cardid;
@@ -37,9 +29,9 @@ namespace RFID_WPF_Autorization
         private void UserNewImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter= "Image Files|*.jpg;*.jpeg;*.png;";
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;";
             //When the user select the file
-            if (openFileDialog.ShowDialog() ==true )
+            if (openFileDialog.ShowDialog() == true)
             {
                 userimagefile = openFileDialog.FileName;
                 var converter = new ImageSourceConverter();
@@ -84,19 +76,21 @@ namespace RFID_WPF_Autorization
                         user.birthdate = LocaleDatePicker.DisplayDate.ToString("yyyy-MM-dd");
                         user.gender = genderbox.SelectedIndex + 1;
 
-                            user.photopath = System.IO.Path.GetFileName(userimagefile);
+                        user.photopath = System.IO.Path.GetFileName(userimagefile);
                         await Createuser(user);
-                        try { 
+                        try
+                        {
                             await CreateNewCardConnection(new CardConnectionModel { Userid = createduser.id, RFID_CardNumber = NFC.GetCardUID() });
                         }
-                        catch (Exception e){
+                        catch (Exception e)
+                        {
                             if (MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.",
                     "Потдтвердить изменение",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question) == MessageBoxResult.Yes)
                             {
                                 await DeleteCardCon(NFC.GetCardUID());
-                                await CreateNewCardConnection(new CardConnectionModel { Userid = createduser.id, RFID_CardNumber = NFC.GetCardUID()});
+                                await CreateNewCardConnection(new CardConnectionModel { Userid = createduser.id, RFID_CardNumber = NFC.GetCardUID() });
                                 if (user.photopath != "default_user.jpeg") { await PushImage(userimagefile); }
                                 NFC.WriteBlock(createduser.id.ToString(), "2");
                                 MessageBox.Show("Пользователь успешно создан", "Успешно");
@@ -122,7 +116,8 @@ namespace RFID_WPF_Autorization
                         }
 
                     }
-                    else {
+                    else
+                    {
                         MessageBox.Show("Заполните все поля. Проверьте правильность ввода");
                     }
 
@@ -145,13 +140,13 @@ namespace RFID_WPF_Autorization
             {
                 throw new ArgumentException($"CreatingError");
             }
-            
+
         }
 
         private async Task CardRemoved()
         {
             Debug.WriteLine("Card disconnected");
-            
+
         }
 
         private async Task Createuser(UserModel user)

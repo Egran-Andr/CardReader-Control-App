@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace RFID_WPF_Autorization
 {
@@ -30,7 +21,7 @@ namespace RFID_WPF_Autorization
         List<FullUser> users = new List<FullUser>();
         ObservableCollection<FullUserReturn> usersloaded = new ObservableCollection<FullUserReturn>();
         WorkplaceModel modelwork = new WorkplaceModel();
-        int curentworkplaceid=0;
+        int curentworkplaceid = 0;
         BitmapImage localimage;
 
         public UsersListPage()
@@ -41,7 +32,7 @@ namespace RFID_WPF_Autorization
         }
 
 
-        private  async void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -59,7 +50,7 @@ namespace RFID_WPF_Autorization
                     AnimatedProgressInCard.Value += percent;
                     await Loadimage(item.id);
                     await getWorkplace(item.id);
-                    usersloaded.Add(new FullUserReturn { id=item.id, workerfio = item.Name + " " + item.Surname + " " + item.lastname, workplacename = modelwork.Name,gender=item.gender, datebirth= DateTime.ParseExact(item.birthdate,"yyyy-MM-dd",null), photopath = localimage });
+                    usersloaded.Add(new FullUserReturn { id = item.id, workerfio = item.Name + " " + item.Surname + " " + item.lastname, workplacename = modelwork.Name, gender = item.gender, datebirth = DateTime.ParseExact(item.birthdate, "yyyy-MM-dd", null), photopath = localimage });
                 }
                 UserDataGrid.ItemsSource = usersloaded;
                 AnimatedProgressInCard.Visibility = System.Windows.Visibility.Collapsed;
@@ -129,13 +120,14 @@ namespace RFID_WPF_Autorization
         }
         private async Task getWorkplace(int userid)
         {
-            modelwork= await ApiProcessor.getUserWorkplace(userid);
+            modelwork = await ApiProcessor.getUserWorkplace(userid);
         }
 
 
         private void UserDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (UserDataGrid.SelectedItem != null){
+            if (UserDataGrid.SelectedItem != null)
+            {
                 FullUserReturn clickeduser = (FullUserReturn)UserDataGrid.SelectedItem;
                 UserUpdateDeleteModalWindow userDialog = new UserUpdateDeleteModalWindow(users.Where(i => i.id.Equals(clickeduser.id)).First());
                 if (userDialog.ShowDialog() == true)
@@ -150,16 +142,17 @@ namespace RFID_WPF_Autorization
         private void CurrentWorkplace_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UserDataGrid.SelectedItem = null;
-        if (CurrentWorkplace.SelectedIndex == 0) { UserDataGrid.ItemsSource = usersloaded; }
-        else {
-        UserDataGrid.ItemsSource = usersloaded.Where(t => t.workplacename.Equals(CurrentWorkplace.SelectedItem.ToString()));
-        }
+            if (CurrentWorkplace.SelectedIndex == 0) { UserDataGrid.ItemsSource = usersloaded; }
+            else
+            {
+                UserDataGrid.ItemsSource = usersloaded.Where(t => t.workplacename.Equals(CurrentWorkplace.SelectedItem.ToString()));
+            }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UserDataGrid.SelectedItem = null;
-            if (CurrentWorkplace.SelectedIndex == 0) { UserDataGrid.ItemsSource = usersloaded.Where(t=>t.workerfio.ToLower().Contains(FioText.Text.ToLower()));}
+            if (CurrentWorkplace.SelectedIndex == 0) { UserDataGrid.ItemsSource = usersloaded.Where(t => t.workerfio.ToLower().Contains(FioText.Text.ToLower())); }
             else
             {
                 UserDataGrid.ItemsSource = usersloaded.Where(t => t.workplacename.Equals(CurrentWorkplace.SelectedItem.ToString()) && t.workerfio.ToLower().Contains(FioText.Text.ToLower()));

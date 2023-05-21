@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RFID_WPF_Autorization
@@ -114,7 +112,7 @@ namespace RFID_WPF_Autorization
     {
         {byteArrayContent, "\"file\"", $"\"{Path.GetFileName(pathFile)}\""}});
 
-                return response.StatusCode; 
+                return response.StatusCode;
             }
         }
 
@@ -178,7 +176,7 @@ namespace RFID_WPF_Autorization
         {
             string url = $"/users/historyadd";
 
-            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, new HistoryAddModel { workerid=newentry.workerid,workplaceid=newentry.workplaceid,entertimestamp=newentry.entertimestamp.ToString( "yyyy-MM-dd H:mm:ss")}))
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, new HistoryAddModel { workerid = newentry.workerid, workplaceid = newentry.workplaceid, entertimestamp = newentry.entertimestamp.ToString("yyyy-MM-dd H:mm:ss") }))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -227,11 +225,11 @@ namespace RFID_WPF_Autorization
         }
 
         //get users all connected cards
-        public static async Task<List<CardConnectionModel>> GetUserConnectedCards(int userid=0)
+        public static async Task<List<CardConnectionModel>> GetUserConnectedCards(int userid = 0)
         {
             string url = "";
-            if (userid != 0) {  url = $"/users/cardlist/?id={userid}"; }  
-            else {  url = $"/users/cardlist/"; }
+            if (userid != 0) { url = $"/users/cardlist/?id={userid}"; }
+            else { url = $"/users/cardlist/"; }
 
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
@@ -248,7 +246,7 @@ namespace RFID_WPF_Autorization
         }
 
         //get history by period
-        public static async Task<List<HistoryModel>> getPeriodHistory(string datebegin,string dateend,int userid=0)
+        public static async Task<List<HistoryModel>> getPeriodHistory(string datebegin, string dateend, int userid = 0)
         {
             string url = "";
             if (userid != 0) { url = $"/users/gethistory/{datebegin}/{dateend}?id={userid}"; }
@@ -307,7 +305,7 @@ namespace RFID_WPF_Autorization
         public static async Task<Uri> UpdateUserWorkplace(WorkplaceUserConnection connect)
         {
             string url = $"/userworkpace/update/{connect.workerid}/{connect.workplaceid}";
-            using (HttpResponseMessage response = await ApiHelper.ApiClient.PutAsync(url,null))
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PutAsync(url, null))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -324,7 +322,7 @@ namespace RFID_WPF_Autorization
         public static async Task<Uri> CreateNewGender(GenderModel gendername)
         {
             string url = $"/gender/";
-            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url,gendername))
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, gendername))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -406,7 +404,7 @@ namespace RFID_WPF_Autorization
                 }
             }
         }
-    //get user workplace
+        //get user workplace
         public static async Task<WorkplaceModel> getUserWorkplace(int id)
         {
             string url = $"/userworkpace/{id}";
@@ -415,7 +413,7 @@ namespace RFID_WPF_Autorization
                 if (response.IsSuccessStatusCode)
                 {
                     WorkplaceReturnModel workplaceinfo = await response.Content.ReadAsAsync<WorkplaceReturnModel>();
-                    WorkplaceModel returnModel=new WorkplaceModel();
+                    WorkplaceModel returnModel = new WorkplaceModel();
                     returnModel.Name = workplaceinfo.Name;
                     return returnModel;
                 }

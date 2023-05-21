@@ -4,16 +4,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace RFID_WPF_Autorization
@@ -47,7 +41,7 @@ namespace RFID_WPF_Autorization
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult =false;
+            this.DialogResult = false;
             NFC.Dispose();
             this.Close();
         }
@@ -60,17 +54,17 @@ namespace RFID_WPF_Autorization
             user.birthdate = LocaleDatePicker.DisplayDate.ToString("yyyy-MM-dd");
             user.gender = genderbox.SelectedIndex + 1;
             user.photopath = localuser.photopath;
-            if (workplacepos !=orgworkpos && workplacepos !=0)
+            if (workplacepos != orgworkpos && workplacepos != 0)
             {
-                if(orgworkpos == -1)//if user hadnt got any job-create new connection
+                if (orgworkpos == -1)//if user hadnt got any job-create new connection
                 {
                     var item = workplaces.Where(t => t.Name.Equals(workbox.SelectedItem.ToString())).FirstOrDefault();
                     MessageBox.Show(item.id.ToString(), item.Name);
-                    await CreateNewWorkplaceConn(new WorkplaceUserConnection { workerid=localuser.id,workplaceid=item.id});
+                    await CreateNewWorkplaceConn(new WorkplaceUserConnection { workerid = localuser.id, workplaceid = item.id });
                 }
                 else//update job if worker had any
                 {
-                    if(workplacepos != 0)
+                    if (workplacepos != 0)
                     {
                         var item = workplaces.Where(t => t.Name.Equals(workbox.SelectedItem.ToString())).FirstOrDefault();
                         MessageBox.Show(item.id.ToString(), item.Name);
@@ -161,7 +155,8 @@ namespace RFID_WPF_Autorization
             SurnameText.Text = localuser.Surname;
             LastNameText.Text = localuser.lastname;
             LocaleDatePicker.SelectedDate = DateTime.Parse(localuser.birthdate);
-            if (localuser.gender==1) { 
+            if (localuser.gender == 1)
+            {
                 genderbox.SelectedIndex = 0;
             }
             else
@@ -177,10 +172,10 @@ namespace RFID_WPF_Autorization
             workbox.ItemsSource = list;
             await GetUserWork(localuser.id);
             int index = workbox.Items.IndexOf(modelwork.Name);
-            if(index !=0)
+            if (index != 0)
             {
                 workbox.SelectedItem = workbox.Items[index];
-                orgworkpos= workbox.SelectedIndex;
+                orgworkpos = workbox.SelectedIndex;
                 workplacepos = workbox.SelectedIndex;
             }
             else
@@ -189,7 +184,7 @@ namespace RFID_WPF_Autorization
                 orgworkpos = -1;
                 workplacepos = workbox.SelectedIndex;
             }
-            
+
         }
 
         private void workbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -215,37 +210,37 @@ namespace RFID_WPF_Autorization
             {
                 await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(async () =>
                 {
-                        try
+                    try
+                    {
+                        await CreateNewCardConnection(new CardConnectionModel { Userid = localuser.id, RFID_CardNumber = NFC.GetCardUID() });
+                    }
+                    catch (Exception e)
+                    {
+                        if (MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.",
+                "Потдтвердить изменение",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
+                            await DeleteCardCon(NFC.GetCardUID());
                             await CreateNewCardConnection(new CardConnectionModel { Userid = localuser.id, RFID_CardNumber = NFC.GetCardUID() });
-                        }
-                        catch (Exception e)
-                        {
-                            if (MessageBox.Show($"Карточка с номером {NFC.GetCardUID()} уже есть в системе.",
-                    "Потдтвердить изменение",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question) == MessageBoxResult.Yes)
-                            {
-                                await DeleteCardCon(NFC.GetCardUID());
-                                await CreateNewCardConnection(new CardConnectionModel { Userid = localuser.id, RFID_CardNumber = NFC.GetCardUID() });
                             NFC.WriteBlock(localuser.id.ToString(), "2");
-                                MessageBox.Show("Карточка перезаписанна", "Успешно");
-                                createsignal = true;
-                                NFC.Disconnect();
-                            }
-                            else
-                            {
-                                return;
-                            }
-                        };
-                        if (createsignal == false)
-                        {
-                            NFC.WriteBlock(localuser.id.ToString(), "2");
-                            MessageBox.Show("Пользователь успешно создан", "Успешно");
+                            MessageBox.Show("Карточка перезаписанна", "Успешно");
+                            createsignal = true;
                             NFC.Disconnect();
                         }
+                        else
+                        {
+                            return;
+                        }
+                    };
+                    if (createsignal == false)
+                    {
+                        NFC.WriteBlock(localuser.id.ToString(), "2");
+                        MessageBox.Show("Пользователь успешно создан", "Успешно");
+                        NFC.Disconnect();
+                    }
 
-                    
+
                     else
                     {
                         MessageBox.Show("Заполните все поля. Проверьте правильность ввода");

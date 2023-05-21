@@ -1,21 +1,10 @@
 ﻿using MaterialDesignThemes.Wpf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using RFID_WPF_Autorization.Properties;
-using System.Windows.Threading;
-using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using RFID_WPF_Autorization.Properties;
+using System;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace RFID_WPF_Autorization
 {
@@ -26,7 +15,7 @@ namespace RFID_WPF_Autorization
     {
         private DispatcherTimer timer;
         private int timerTickCount = 0;
-        bool foulderselected=false;
+        bool foulderselected = false;
         private string selectedsavepath;
         public SettingsWindow()
         {
@@ -48,7 +37,7 @@ namespace RFID_WPF_Autorization
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += new EventHandler(Timer_Tick);
-            
+
         }
 
         private void ToogleTheme_Click(object sender, RoutedEventArgs e)
@@ -107,7 +96,7 @@ namespace RFID_WPF_Autorization
                 SaveLabel.Content = dialog.FileName;
                 selectedsavepath = dialog.FileName;
                 foulderselected = true;
-                MessageBox.Show($"Директория сохранения файлов для логов изменена:{selectedsavepath}","Изменение директории");
+                MessageBox.Show($"Директория сохранения файлов для логов изменена:{selectedsavepath}", "Изменение директории");
             }
             this.Activate();
         }
