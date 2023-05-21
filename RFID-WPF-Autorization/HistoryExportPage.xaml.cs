@@ -50,7 +50,7 @@ namespace RFID_WPF_Autorization
                 {
                     await LoadUser(item.workerid);
                     filteredhistory.Add(new HistoryReturnModelDate { workerfio = loadeduserinfo.Name + " " + loadeduserinfo.Surname + " " + loadeduserinfo.lastname, workplacename = workplaces.FirstOrDefault(t => t.id == item.workplaceid).Name, entertimestamp = item.entertimestamp});
-                    ExportNumber.Text = $"Количество записей для импорта: {filteredhistory.Count}";
+                    ExportNumber.Text = $"Количество записей для экспорта: {filteredhistory.Count}";
                     HistorydataGrid.ItemsSource = filteredhistory;
                 }
                 BeginDate.SelectedDate = DateTime.Now.AddYears(-20);
@@ -121,7 +121,7 @@ namespace RFID_WPF_Autorization
                 }
                 
             }
-            ExportNumber.Text = $"Количество записей для импорта: {historycopy.Count}";
+            ExportNumber.Text = $"Количество записей для экспорта: {historycopy.Count}";
         }
 
         private  void BeginDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -138,7 +138,7 @@ namespace RFID_WPF_Autorization
                     historycopy = filteredhistory.Where(t => t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value && t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value).ToList();
                 }
 
-                ExportNumber.Text = $"Количество записей для импорта: {historycopy.Count}";
+                ExportNumber.Text = $"Количество записей для экспорта: {historycopy.Count}";
             }
             else
             {
@@ -160,7 +160,7 @@ namespace RFID_WPF_Autorization
                     historycopy = filteredhistory.Where(t => t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value && t.entertimestamp >= BeginDate.SelectedDate.Value && t.entertimestamp <= EndDate.SelectedDate.Value).ToList();
                 }
 
-                ExportNumber.Text = $"Количество записей для импорта: {historycopy.Count}";
+                ExportNumber.Text = $"Количество записей для экспорта: {historycopy.Count}";
             }
             else
             {
@@ -197,7 +197,7 @@ namespace RFID_WPF_Autorization
                 }
 
             }
-            ExportNumber.Text = $"Количество записей для импорта: {historycopy.Count}";
+            ExportNumber.Text = $"Количество записей для экспорта: {historycopy.Count}";
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)

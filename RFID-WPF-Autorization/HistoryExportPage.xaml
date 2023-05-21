@@ -76,7 +76,7 @@
             </GridSplitter>
             <Expander
     HorizontalAlignment="Stretch"
-    Header="Сортировка">
+    Header="Фильрация">
                 <StackPanel
       Orientation="Vertical"
       TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -123,7 +123,7 @@
         <Border Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Stretch" Width="Auto">
             <Grid Grid.Row="3">
 
-                <TextBlock x:Name="ExportNumber" Grid.Row="3" Text="Количество записей для импорта:" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                <TextBlock x:Name="ExportNumber" Grid.Row="3" Text="Количество записей для экспорта:" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
                 <Button x:Name="ExportButton"
   Style="{StaticResource MaterialDesignIconButton}"
   ToolTip="MaterialDesignIconButton" VerticalAlignment="Center" HorizontalAlignment="Right"

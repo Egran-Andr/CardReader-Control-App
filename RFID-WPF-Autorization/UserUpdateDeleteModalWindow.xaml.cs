@@ -48,6 +48,7 @@ namespace RFID_WPF_Autorization
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult =false;
+            NFC.Dispose();
             this.Close();
         }
 

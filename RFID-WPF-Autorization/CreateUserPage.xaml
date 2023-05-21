@@ -97,7 +97,7 @@
                 <materialDesign:TransitionEffect Kind="FadeIn" />
                 <materialDesign:TransitionEffect Kind="SlideInFromBottom" />
             </materialDesign:TransitioningContent.OpeningEffects>
-            <Label  x:Name="comment" Content="После заполнения полей,приседините карточку для записи" HorizontalContentAlignment="Center" Width="Auto" Height="38" Grid.Row="3" FontSize="20" Margin="0,103,0,0" VerticalAlignment="Bottom"/>
+            <Label  x:Name="comment" Content="После заполнения полей,присоедините карточку для записи" HorizontalContentAlignment="Center" Width="Auto" Height="38" Grid.Row="3" FontSize="20" Margin="0,103,0,0" VerticalAlignment="Bottom"/>
             </materialDesign:TransitioningContent>
     </Grid>
 </Page>
