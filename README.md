@@ -5,7 +5,7 @@ This is an WPF Application that i tried using to read and write on RFID and NFC 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ###Prerequisites
-First,this project wont work without Web API.  Base code to Api(python FastApi)  is located in project :
+First,this project wont work without Web API.  Base code to Api(python FastApi)  is located in project : https://github.com/Egran-Andr/Python-WebApiForRFID
 To change adresss oe port connection you must change file ApiHelper.cs.
 
 
