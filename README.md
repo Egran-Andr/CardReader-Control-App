@@ -15,7 +15,7 @@ Project was tested and working with ACR 122u reader but it should work with any 
 ###Installing
 A step by step series of examples that tell you how to get a development env running
 
-git clone https://github.com/Egran-Andr/Bottle_site cd 
+git clone https://github.com/Egran-Andr/CardReder-Control-App cd 
 
 ## Built With
 
