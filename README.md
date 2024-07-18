@@ -50,7 +50,7 @@ NFC.GetCardUID();
 NFC.GetReadersList(); //public List<string> GetReadersList()
 ```
 
-## Example Inserted and Ejected Event Usage
+### Example Inserted and Ejected Event Usage
 ```csharp
 public void Card_Inserted()
 {
