@@ -3,7 +3,7 @@ This is an WPF Application that i tried using to read and write on RFID and NFC 
 
 ## RFID-Library
 The main idea of this project is creation of  easy-to-use RFID connection library. You can easely use it by importing NFCReader.cs and Card.cs files.
-The library was tested on USB ARC122U Rfid Reader,but theoreticly will work with other models.
+The library was tested on USB ARC122U RFID Reader, but in theory, will work with other models.
 
 ### Connection
 
@@ -84,10 +84,10 @@ First,this project wont work without Web API.  Base code to Api(python FastApi) 
 To change adresss oe port connection you must change file ApiHelper.cs.
 
 
-###Equipment
+### Equipment
 Project was tested and working with ACR 122u reader but it should work with any reader with USB port conection.
 
-###Installing
+### Installing
 A step by step series of examples that tell you how to get a development env running
 
 git clone https://github.com/Egran-Andr/CardReder-Control-App cd 
@@ -96,3 +96,11 @@ git clone https://github.com/Egran-Andr/CardReder-Control-App cd
 
 * [HttpClient]([https://bottlepy.org/](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler?view=net-7.0)https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler?view=net-7.0) - HttpClient Docs
 * [Material design for WPF](http://materialdesigninxaml.net/) - XAML Material Docs
+
+## Themed literature
+* RFID for the Supply Chain and Operations  Professionals, Third Edition  / Pamela Zelbst , Victor Sower - Business Expert Press, 2021;
+* High-Density and De-Densified Smart Campus Communications /Daniel Minoli, Jo-Anne Dressendofer- Wiley,2022;
+* Battery-less NFC Sensors for the Internet of Things /Mart&iacute; Boada, Antonio Lazaro, David Girbau, Ram&oacute;n Villarino - Wiley-ISTE,2022;
+* wincard.dll docs – URL: https://learn.microsoft.com/en-us/windows/win32/api/winscard/;
+* AR122U card reader docs - URL: https://www.acs.com.hk/en/products/3/acr122u-usb-nfc-reader/
+* And this project: https://www.codeproject.com/Articles/16653/A-Smart-Card-Framework-for-NET
